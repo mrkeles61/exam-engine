@@ -1,0 +1,85 @@
+services:
+  # -------------------------------------------------------------------------
+  # PostgreSQL — internal only, not exposed to host
+  # -------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER:-examengine}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB:       ${POSTGRES_DB:-examengine}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - exam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-examengine} -d ${POSTGRES_DB:-examengine}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # -------------------------------------------------------------------------
+  # Redis — internal only, not exposed to host
+  # -------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - exam-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # -------------------------------------------------------------------------
+  # FastAPI backend
+  # -------------------------------------------------------------------------
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-examengine}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-examengine}
+      REDIS_URL:    redis://redis:6379/0
+    volumes:
+      - uploads_data:/data/uploads
+    networks:
+      - exam-network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # -------------------------------------------------------------------------
+  # React frontend — nginx serves static files + proxies /api to api:8000
+  # -------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - exam-network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      - api
+
+networks:
+  exam-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploads_data:
