@@ -17,14 +17,12 @@ from app.schemas.schemas import (
 )
 from app.services.pipeline import run_pipeline, run_ocr, run_layout, run_evaluation
 
-router = APIRouter(tags=["evaluation"])
+router = APIRouter(tags=["Pipeline"])
 
-# Statuses that allow each stage to run
 _OCR_ALLOWED = {JobStatus.pending, JobStatus.ocr_failed}
 _LAYOUT_ALLOWED = {JobStatus.ocr_complete, JobStatus.layout_failed}
 _EVAL_ALLOWED = {JobStatus.layout_complete, JobStatus.eval_failed}
 
-# All "failure" statuses for retry
 _FAILED_STATUSES = {
     JobStatus.failed,
     JobStatus.ocr_failed,
@@ -33,11 +31,13 @@ _FAILED_STATUSES = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Auto-mode: POST /evaluate
-# ---------------------------------------------------------------------------
-
-@router.post("/evaluate", response_model=JobOut, status_code=status.HTTP_202_ACCEPTED)
+@router.post(
+    "/evaluate",
+    response_model=JobOut,
+    status_code=status.HTTP_202_ACCEPTED,
+    summary="Start Automatic Evaluation",
+    description="Runs all pipeline stages sequentially in the background: OCR → Layout Analysis → Evaluation. Job status can be tracked via the /jobs endpoint.",
+)
 async def start_evaluation(
     body: EvaluateRequest,
     background_tasks: BackgroundTasks,
@@ -67,11 +67,12 @@ async def start_evaluation(
     return job
 
 
-# ---------------------------------------------------------------------------
-# Manual stage endpoints
-# ---------------------------------------------------------------------------
-
-@router.post("/jobs/{job_id}/stage/ocr", response_model=OcrStageOut)
+@router.post(
+    "/jobs/{job_id}/stage/ocr",
+    response_model=OcrStageOut,
+    summary="Run OCR Stage",
+    description="Runs only the OCR stage. Extracts text from the PDF using Tesseract/PaddleOCR. Calculates a confidence score per page. Job must be in 'pending' or 'ocr_failed' status.",
+)
 async def stage_ocr(
     job_id: uuid.UUID,
     background_tasks: BackgroundTasks,
@@ -95,7 +96,12 @@ async def stage_ocr(
     )
 
 
-@router.post("/jobs/{job_id}/stage/layout", response_model=LayoutStageOut)
+@router.post(
+    "/jobs/{job_id}/stage/layout",
+    response_model=LayoutStageOut,
+    summary="Run Layout Analysis Stage",
+    description="Analyzes OCR output to detect individual student answer sheets. Extracts MC and open-ended answers per student. Job must be in 'ocr_complete' or 'layout_failed' status.",
+)
 async def stage_layout(
     job_id: uuid.UUID,
     background_tasks: BackgroundTasks,
@@ -119,7 +125,12 @@ async def stage_layout(
     )
 
 
-@router.post("/jobs/{job_id}/stage/evaluate", response_model=EvalStageOut)
+@router.post(
+    "/jobs/{job_id}/stage/evaluate",
+    response_model=EvalStageOut,
+    summary="Run Evaluation Stage",
+    description="Scores MC answers with rule-based matching and open-ended answers with LLM. Produces per-student results. Job must be in 'layout_complete' or 'eval_failed' status.",
+)
 async def stage_evaluate(
     job_id: uuid.UUID,
     background_tasks: BackgroundTasks,
@@ -139,11 +150,12 @@ async def stage_evaluate(
     return EvalStageOut(status="eval_running", students_scored=0, average=0.0)
 
 
-# ---------------------------------------------------------------------------
-# Stage results inspection
-# ---------------------------------------------------------------------------
-
-@router.get("/jobs/{job_id}/stage-results", response_model=StageResultsOut)
+@router.get(
+    "/jobs/{job_id}/stage-results",
+    response_model=StageResultsOut,
+    summary="Get Stage Intermediate Outputs",
+    description="Returns the intermediate output of each completed stage: OCR page count and confidence, detected student count from layout, and scoring summary from evaluation.",
+)
 async def get_stage_results(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -191,11 +203,12 @@ async def get_stage_results(
     return StageResultsOut(ocr=ocr_info, layout=layout_info, evaluation=eval_info)
 
 
-# ---------------------------------------------------------------------------
-# Retry failed job
-# ---------------------------------------------------------------------------
-
-@router.post("/jobs/{job_id}/retry", response_model=RetryOut)
+@router.post(
+    "/jobs/{job_id}/retry",
+    response_model=RetryOut,
+    summary="Retry Failed Job",
+    description="Restarts the pipeline from the failed stage. Does not re-run prior successful stages. Only works on jobs with a failure status (ocr_failed, layout_failed, eval_failed, failed).",
+)
 async def retry_job(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -211,7 +224,6 @@ async def retry_job(
         )
 
     if job.status in (JobStatus.eval_failed,):
-        # Reset to layout_complete, delete partial student results
         await db.execute(
             delete(StudentResult).where(StudentResult.job_id == job_id)
         )
@@ -221,7 +233,6 @@ async def retry_job(
         job.status = JobStatus.ocr_complete
         retrying_from = "layout"
     else:
-        # ocr_failed or generic failed
         job.status = JobStatus.pending
         retrying_from = "ocr"
 
@@ -229,7 +240,6 @@ async def retry_job(
     job.current_stage = None
     await db.commit()
 
-    # Re-trigger the appropriate stage in background
     from fastapi import BackgroundTasks
     from app.services.pipeline import run_ocr, run_layout, run_evaluation
     import asyncio
@@ -248,11 +258,12 @@ async def retry_job(
     )
 
 
-# ---------------------------------------------------------------------------
-# Job list / detail / cancel
-# ---------------------------------------------------------------------------
-
-@router.get("/jobs", response_model=List[JobOut])
+@router.get(
+    "/jobs",
+    response_model=List[JobOut],
+    summary="List All Jobs",
+    description="Returns all evaluation jobs sorted newest first. Each item includes status, progress percentage, and student count.",
+)
 async def list_jobs(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_professor_or_admin),
@@ -263,7 +274,12 @@ async def list_jobs(
     return result.scalars().all()
 
 
-@router.get("/jobs/{job_id}", response_model=JobOut)
+@router.get(
+    "/jobs/{job_id}",
+    response_model=JobOut,
+    summary="Get Job Detail",
+    description="Returns the current status, progress percentage, total/processed student count, and error message for a specific job.",
+)
 async def get_job(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -276,7 +292,12 @@ async def get_job(
     return job
 
 
-@router.post("/jobs/{job_id}/cancel", response_model=JobOut)
+@router.post(
+    "/jobs/{job_id}/cancel",
+    response_model=JobOut,
+    summary="Cancel Job",
+    description="Cancels a running job by setting its status to 'failed'. Cannot cancel already-completed or already-failed jobs.",
+)
 async def cancel_job(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -297,11 +318,12 @@ async def cancel_job(
     return job
 
 
-# ---------------------------------------------------------------------------
-# Timeline
-# ---------------------------------------------------------------------------
-
-@router.get("/jobs/{job_id}/timeline", response_model=TimelineOut)
+@router.get(
+    "/jobs/{job_id}/timeline",
+    response_model=TimelineOut,
+    summary="Get Stage Timings",
+    description="Returns the start time, end time, and total duration in seconds for each pipeline stage (OCR, layout, evaluation), derived from pipeline log timestamps.",
+)
 async def get_job_timeline(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -312,7 +334,6 @@ async def get_job_timeline(
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
-    # Derive stage start/end times from pipeline logs
     logs_res = await db.execute(
         select(PipelineLog)
         .where(PipelineLog.job_id == job_id)

@@ -24,12 +24,22 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down.")
 
 
+_TAGS_METADATA = [
+    {"name": "Authentication", "description": "Register, login, and retrieve the current user profile."},
+    {"name": "Exam Management", "description": "Upload exam PDFs and manage exam records."},
+    {"name": "Pipeline", "description": "Run the OCR → Layout → Evaluation pipeline. Supports full auto-mode and per-stage manual control."},
+    {"name": "Answer Keys", "description": "Create, update, validate, and delete answer keys used for grading."},
+    {"name": "Results & Analytics", "description": "Retrieve student results, statistics, per-question analytics, and export to CSV."},
+    {"name": "System", "description": "Health check, exam list with status, and dashboard summary metrics."},
+]
+
 app = FastAPI(
     title=settings.APP_NAME,
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
+    openapi_tags=_TAGS_METADATA,
 )
 
 # ---------------------------------------------------------------------------

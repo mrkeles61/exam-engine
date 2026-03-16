@@ -11,10 +11,16 @@ from app.dependencies import get_db, require_professor_or_admin
 from app.models.models import Exam, ExamType, User
 from app.schemas.schemas import ExamOut
 
-router = APIRouter(prefix="/upload", tags=["upload"])
+router = APIRouter(prefix="/upload", tags=["Exam Management"])
 
 
-@router.post("", response_model=ExamOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=ExamOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Upload Exam PDF",
+    description="Accepts a scanned exam PDF file, saves it under /data/uploads/, and creates an Exam record in the database with title, course name, and exam type.",
+)
 async def upload_exam(
     file: UploadFile = File(...),
     title: str = "Untitled Exam",
@@ -26,7 +32,6 @@ async def upload_exam(
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are accepted")
 
-    # Check size
     content = await file.read()
     size_mb = len(content) / (1024 * 1024)
     if size_mb > settings.MAX_UPLOAD_SIZE_MB:
@@ -54,7 +59,12 @@ async def upload_exam(
     return exam
 
 
-@router.get("/{exam_id}", response_model=ExamOut)
+@router.get(
+    "/{exam_id}",
+    response_model=ExamOut,
+    summary="Get Exam Detail",
+    description="Returns metadata for a specific exam (title, course, type, upload date) from the database.",
+)
 async def get_upload(
     exam_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -67,7 +77,12 @@ async def get_upload(
     return exam
 
 
-@router.delete("/{exam_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{exam_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete Exam",
+    description="Permanently deletes the exam record from the database and removes the PDF file from disk.",
+)
 async def delete_upload(
     exam_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -78,7 +93,6 @@ async def delete_upload(
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")
 
-    # Remove file from disk
     if exam.pdf_path:
         exam_dir = os.path.dirname(exam.pdf_path)
         if os.path.isdir(exam_dir):

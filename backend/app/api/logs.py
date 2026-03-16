@@ -11,10 +11,15 @@ from app.dependencies import get_db, get_current_user
 from app.models.models import EvaluationJob, PipelineLog, User
 from app.schemas.schemas import PipelineLogOut
 
-router = APIRouter(tags=["logs"])
+router = APIRouter(tags=["Pipeline"])
 
 
-@router.get("/jobs/{job_id}/logs", response_model=List[PipelineLogOut])
+@router.get(
+    "/jobs/{job_id}/logs",
+    response_model=List[PipelineLogOut],
+    summary="Get Pipeline Logs",
+    description="Returns all log entries produced during pipeline execution. Supports incremental polling via the 'after' query parameter (ISO timestamp) to fetch only new entries since the last poll.",
+)
 async def get_job_logs(
     job_id: uuid.UUID,
     after: Optional[datetime] = Query(None, description="Only return logs after this timestamp"),

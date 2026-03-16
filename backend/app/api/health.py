@@ -15,14 +15,18 @@ from app.dependencies import get_db, require_professor_or_admin
 from app.models.models import Exam, EvaluationJob, JobStatus, StudentResult, User
 from app.schemas.schemas import DashboardOut, ExamHistoryItem, ExamListItem, HealthOut
 
-router = APIRouter(tags=["health"])
+router = APIRouter(tags=["System"])
 
 _START_TIME = time.time()
 
 
-@router.get("/health", response_model=HealthOut)
+@router.get(
+    "/health",
+    response_model=HealthOut,
+    summary="System Health Check",
+    description="Checks database connectivity, Redis status, and server uptime. Returns 'ok' when all services are reachable.",
+)
 async def health_check():
-    # DB check
     db_status = "connected"
     try:
         async with engine.connect() as conn:
@@ -30,7 +34,6 @@ async def health_check():
     except Exception:
         db_status = "error"
 
-    # Redis check
     redis_status = "connected"
     try:
         r = aioredis.from_url(settings.REDIS_URL, socket_connect_timeout=1)
@@ -48,7 +51,12 @@ async def health_check():
     )
 
 
-@router.get("/exams", response_model=List[ExamListItem])
+@router.get(
+    "/exams",
+    response_model=List[ExamListItem],
+    summary="List All Exams",
+    description="Returns all exams with their latest evaluation job status and student count from the most recent completed job.",
+)
 async def list_exams_with_status(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_professor_or_admin),
@@ -58,7 +66,6 @@ async def list_exams_with_status(
 
     items = []
     for exam in exams:
-        # Latest job for this exam
         job_res = await db.execute(
             select(EvaluationJob)
             .where(EvaluationJob.exam_id == exam.id)
@@ -67,7 +74,6 @@ async def list_exams_with_status(
         )
         latest_job = job_res.scalar_one_or_none()
 
-        # Student count from latest completed job
         student_count = 0
         if latest_job and latest_job.status == JobStatus.complete:
             student_count = latest_job.total_students
@@ -84,7 +90,12 @@ async def list_exams_with_status(
     return items
 
 
-@router.get("/exams/{exam_id}/history", response_model=List[ExamHistoryItem])
+@router.get(
+    "/exams/{exam_id}/history",
+    response_model=List[ExamHistoryItem],
+    summary="Exam Evaluation History",
+    description="Returns all evaluation runs for a specific exam, including status, timestamps, student count, and average score for each completed run.",
+)
 async def get_exam_history(
     exam_id,
     db: AsyncSession = Depends(get_db),
@@ -123,28 +134,29 @@ async def get_exam_history(
     return history
 
 
-@router.get("/dashboard/summary", response_model=DashboardOut)
+@router.get(
+    "/dashboard/summary",
+    response_model=DashboardOut,
+    summary="Dashboard Summary",
+    description="Returns all dashboard metrics in a single call: total exams, total students evaluated, overall average score, active job count, and the 5 most recent jobs.",
+)
 async def dashboard_summary(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_professor_or_admin),
 ):
-    # Total exams
     exams_count = (await db.execute(select(func.count(Exam.id)))).scalar_one()
 
-    # Total students (sum across all complete jobs)
     total_students_res = await db.execute(
         select(func.sum(EvaluationJob.total_students))
         .where(EvaluationJob.status == JobStatus.complete)
     )
     total_students = total_students_res.scalar_one() or 0
 
-    # Average score across all student results
     avg_res = await db.execute(select(func.avg(StudentResult.total_pct)))
     avg_score = avg_res.scalar_one()
     if avg_score is not None:
         avg_score = round(float(avg_score), 2)
 
-    # Active jobs
     active_statuses = [
         JobStatus.pending, JobStatus.ocr_running, JobStatus.layout_running, JobStatus.eval_running,
     ]
@@ -155,7 +167,6 @@ async def dashboard_summary(
         )
     ).scalar_one()
 
-    # Recent 5 jobs
     recent_res = await db.execute(
         select(EvaluationJob).order_by(EvaluationJob.created_at.desc()).limit(5)
     )

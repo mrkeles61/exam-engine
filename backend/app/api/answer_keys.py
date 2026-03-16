@@ -9,10 +9,16 @@ from app.dependencies import get_db, require_professor_or_admin
 from app.models.models import AnswerKey, User
 from app.schemas.schemas import AnswerKeyCreate, AnswerKeyOut, AnswerKeyUpdate, AnswerKeyValidateOut
 
-router = APIRouter(prefix="/answer-keys", tags=["answer-keys"])
+router = APIRouter(prefix="/answer-keys", tags=["Answer Keys"])
 
 
-@router.post("", response_model=AnswerKeyOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=AnswerKeyOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create Answer Key",
+    description="Creates a new answer key. Questions are stored in JSONB format with question number, type (mc/open), correct answer, and point value.",
+)
 async def create_answer_key(
     body: AnswerKeyCreate,
     db: AsyncSession = Depends(get_db),
@@ -30,7 +36,12 @@ async def create_answer_key(
     return key
 
 
-@router.get("", response_model=List[AnswerKeyOut])
+@router.get(
+    "",
+    response_model=List[AnswerKeyOut],
+    summary="List Answer Keys",
+    description="Returns all answer keys sorted by creation date (newest first).",
+)
 async def list_answer_keys(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_professor_or_admin),
@@ -39,7 +50,12 @@ async def list_answer_keys(
     return result.scalars().all()
 
 
-@router.get("/{key_id}", response_model=AnswerKeyOut)
+@router.get(
+    "/{key_id}",
+    response_model=AnswerKeyOut,
+    summary="Get Answer Key Detail",
+    description="Returns all questions and correct answers for a specific answer key.",
+)
 async def get_answer_key(
     key_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -52,7 +68,12 @@ async def get_answer_key(
     return key
 
 
-@router.put("/{key_id}", response_model=AnswerKeyOut)
+@router.put(
+    "/{key_id}",
+    response_model=AnswerKeyOut,
+    summary="Update Answer Key",
+    description="Updates the name, course name, or questions of an existing answer key. Only provided fields are changed.",
+)
 async def update_answer_key(
     key_id: uuid.UUID,
     body: AnswerKeyUpdate,
@@ -76,7 +97,12 @@ async def update_answer_key(
     return key
 
 
-@router.post("/{key_id}/validate", response_model=AnswerKeyValidateOut)
+@router.post(
+    "/{key_id}/validate",
+    response_model=AnswerKeyValidateOut,
+    summary="Validate Answer Key",
+    description="Checks the answer key for issues: missing MC answers, total points not equal to 100, duplicate question numbers, and missing rubrics for open-ended questions.",
+)
 async def validate_answer_key(
     key_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -90,17 +116,14 @@ async def validate_answer_key(
     questions = key.questions or []
     warnings = []
 
-    # Check for missing correct_answer on MC questions
     for q in questions:
         if q.get("type") == "mc" and not q.get("correct_answer"):
             warnings.append(f"Soru {q['number']} cevabı eksik")
 
-    # Check total points add up to 100
     total_points = sum(q.get("points", 0) for q in questions)
     if questions and abs(total_points - 100.0) > 0.01:
         warnings.append(f"Toplam puan {total_points:.0f}, 100 olmalı")
 
-    # Check for duplicate question numbers
     numbers = [q.get("number") for q in questions]
     seen = set()
     for n in numbers:
@@ -108,7 +131,6 @@ async def validate_answer_key(
             warnings.append(f"Soru {n} numarası tekrar ediyor")
         seen.add(n)
 
-    # Check for missing rubrics on open questions
     for q in questions:
         if q.get("type") == "open" and not q.get("rubric"):
             warnings.append(f"Soru {q['number']} için rubric eksik")
@@ -116,7 +138,12 @@ async def validate_answer_key(
     return AnswerKeyValidateOut(valid=len(warnings) == 0, warnings=warnings)
 
 
-@router.delete("/{key_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{key_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete Answer Key",
+    description="Permanently deletes an answer key from the database.",
+)
 async def delete_answer_key(
     key_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),

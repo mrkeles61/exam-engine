@@ -18,7 +18,7 @@ from app.schemas.schemas import (
     ReportOut, ResultsListOut, StatsOut, StudentResultOut, StudentSummary,
 )
 
-router = APIRouter(prefix="/results", tags=["results"])
+router = APIRouter(prefix="/results", tags=["Results & Analytics"])
 
 
 async def _get_completed_job(job_id: uuid.UUID, db: AsyncSession) -> EvaluationJob:
@@ -31,7 +31,12 @@ async def _get_completed_job(job_id: uuid.UUID, db: AsyncSession) -> EvaluationJ
     return job
 
 
-@router.get("/{job_id}", response_model=ResultsListOut)
+@router.get(
+    "/{job_id}",
+    response_model=ResultsListOut,
+    summary="Get All Student Results",
+    description="Returns all student results for a completed job: MC score, open-ended score, total percentage, and letter grade.",
+)
 async def get_results(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -47,7 +52,12 @@ async def get_results(
     return ResultsListOut(job_id=job_id, total=len(results), results=results)
 
 
-@router.get("/{job_id}/student/{student_id}", response_model=StudentResultOut)
+@router.get(
+    "/{job_id}/student/{student_id}",
+    response_model=StudentResultOut,
+    summary="Get Student Detail Result",
+    description="Returns per-question answer analysis for a single student: selected vs correct answer for each MC question, and LLM score and feedback for open-ended questions.",
+)
 async def get_student_result(
     job_id: uuid.UUID,
     student_id: str,
@@ -67,7 +77,11 @@ async def get_student_result(
     return row
 
 
-@router.get("/{job_id}/export")
+@router.get(
+    "/{job_id}/export",
+    summary="Export Results as CSV",
+    description="Downloads all results as a CSV file streamed directly to the browser. Columns: student_id, student_name, mc_score, mc_total, open_score, open_total, total_pct, grade.",
+)
 async def export_results_csv(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -105,7 +119,12 @@ async def export_results_csv(
     )
 
 
-@router.get("/{job_id}/stats", response_model=StatsOut)
+@router.get(
+    "/{job_id}/stats",
+    response_model=StatsOut,
+    summary="Get Statistics",
+    description="Calculates average, highest, lowest, standard deviation, grade distribution, and passing rate for a completed job.",
+)
 async def get_stats(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -140,7 +159,12 @@ async def get_stats(
     )
 
 
-@router.get("/{job_id}/report", response_model=ReportOut)
+@router.get(
+    "/{job_id}/report",
+    response_model=ReportOut,
+    summary="Get Summary Report",
+    description="Detailed summary including top/bottom 3 students, hardest questions, class performance metrics (average, median, std dev, pass rate), and grade distribution.",
+)
 async def get_report(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -180,7 +204,6 @@ async def get_report(
         for r in sorted_desc[-3:]
     ]
 
-    # Hardest questions: lowest correct_rate among MC questions
     q_stats: dict = {}
     for r in results:
         for a in (r.answers or []):
@@ -226,7 +249,12 @@ async def get_report(
     )
 
 
-@router.get("/{job_id}/analytics", response_model=AnalyticsOut)
+@router.get(
+    "/{job_id}/analytics",
+    response_model=AnalyticsOut,
+    summary="Per-Question Analytics",
+    description="For each question, calculates correct count, incorrect count, correct rate percentage, and the most commonly given wrong answer.",
+)
 async def get_analytics(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -271,7 +299,12 @@ async def get_analytics(
     return AnalyticsOut(job_id=job_id, questions=questions)
 
 
-@router.patch("/{job_id}/student/{student_id}", response_model=StudentResultOut)
+@router.patch(
+    "/{job_id}/student/{student_id}",
+    response_model=StudentResultOut,
+    summary="Override Grade",
+    description="Allows the instructor to manually override the LLM-assigned score for a student. Recalculates total_pct and auto-assigns the letter grade unless a manual grade is also provided.",
+)
 async def override_grade(
     job_id: uuid.UUID,
     student_id: str,
@@ -295,14 +328,12 @@ async def override_grade(
     if body.open_score is not None:
         row.open_score = body.open_score
 
-    # Recompute total_pct
     grand = row.mc_total + row.open_total
     row.total_pct = round((row.mc_score + row.open_score) / grand * 100, 2) if grand else 0.0
 
     if body.grade is not None:
         row.grade = body.grade
     else:
-        # Auto-assign grade from pct
         p = row.total_pct
         if p >= 90: row.grade = "AA"
         elif p >= 85: row.grade = "BA"
@@ -318,7 +349,12 @@ async def override_grade(
     return row
 
 
-@router.post("/{job_id}/notify", response_model=NotifyOut)
+@router.post(
+    "/{job_id}/notify",
+    response_model=NotifyOut,
+    summary="Send Result Notification",
+    description="Simulates sending a notification that evaluation results are ready. Returns the exam title and number of students notified.",
+)
 async def notify_students(
     job_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
