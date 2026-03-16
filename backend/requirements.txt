@@ -17,5 +17,8 @@ bcrypt==4.0.1
 pydantic-settings==2.6.1
 pydantic[email]==2.10.3
 
+# Redis
+redis==5.2.1
+
 # Utilities
 python-dotenv==1.0.1
