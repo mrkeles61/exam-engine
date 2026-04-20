@@ -108,6 +108,8 @@ export const en: Record<TranslationKey, string> = {
   'workspace.confidence.ocr': 'Text OCR',
   'workspace.confidence.grading': 'Grading',
   'workspace.confidence.title': 'Confidence Scores',
+  'workspace.demoTag': 'DEMO',
+  'workspace.demoTooltip': "Values are simulated — the real OCR/ML pipeline isn't running server-side yet.",
 
   // Flag-region quick win
   'workspace.flagRegion': 'Flag Region',
@@ -210,6 +212,7 @@ export const en: Record<TranslationKey, string> = {
   'builder.preview.exportPdf': 'Export PDF',
   'builder.preview.save': 'Save',
   'builder.preview.saving': 'Saving…',
+  'builder.preview.sampleName': 'Sample Student',
 
   // Sidebar
   'builder.sidebar.title': 'Questions ({n})',

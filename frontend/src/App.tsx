@@ -1,16 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastProvider } from './contexts/ToastContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
-import { FullScreenLayout } from './components/FullScreenLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Upload from './pages/Upload';
 import Jobs from './pages/Jobs';
 import Results from './pages/Results';
 import StudentDetail from './pages/StudentDetail';
-import StudentDetailV4 from './pages/StudentDetailV4';
-import ExamBuilder from './pages/ExamBuilder';
 import AnswerKeys from './pages/AnswerKeys';
 import Analytics from './pages/Analytics';
 import PipelineMonitor from './pages/PipelineMonitor';
@@ -37,21 +34,18 @@ export default function App() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="pipeline/:jobId" element={<PipelineMonitor />} />
             <Route path="results/:jobId" element={<Results />} />
-            {/* Classic workspace kept as fallback for the layout switcher (Klasik/Sekmeli/Bölünmüş) */}
+            <Route path="results/:jobId/student/:studentId" element={<StudentDetail />} />
             <Route path="results/:jobId/student/:studentId/classic" element={<StudentDetail />} />
             <Route path="results/:jobId/student/:studentId/tabs" element={<StudentDetail />} />
             <Route path="results/:jobId/student/:studentId/split" element={<StudentDetail />} />
+            {/* Any lingering /v4 deep links fall back to the classic workspace */}
+            <Route path="results/:jobId/student/:studentId/v4" element={<StudentDetail />} />
             {/* Legacy route */}
             <Route path="grading/:jobId/:studentId" element={<StudentDetail />} />
-          </Route>
-
-          {/* Full-screen routes — no left sidebar, top nav is internal.
-              The student workspace default lives here so every link to a student lands on V4. */}
-          <Route element={<ProtectedRoute><FullScreenLayout /></ProtectedRoute>}>
-            <Route path="results/:jobId/student/:studentId" element={<StudentDetailV4 />} />
-            <Route path="results/:jobId/student/:studentId/v4" element={<StudentDetailV4 />} />
-            <Route path="exam-builder" element={<ExamBuilder />} />
-            <Route path="exam-builder/:answerKeyId" element={<ExamBuilder />} />
+            {/* Exam-builder was an optional authoring surface that is not part of this
+                public build; redirect anyone hitting the old URL to the answer-keys list. */}
+            <Route path="exam-builder" element={<Navigate to="/answer-keys" replace />} />
+            <Route path="exam-builder/:answerKeyId" element={<Navigate to="/answer-keys" replace />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

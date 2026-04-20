@@ -12,7 +12,6 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/',              labelKey: 'nav.dashboard',    icon: 'dashboard',        end: true },
   { to: '/upload',        labelKey: 'nav.uploadExam',   icon: 'cloud_upload' },
-  { to: '/exam-builder',  labelKey: 'nav.examBuilder',  icon: 'assignment_add' },
   { to: '/jobs',          labelKey: 'nav.evaluations',  icon: 'assignment' },
   { to: '/answer-keys',   labelKey: 'nav.answerKeys',   icon: 'key' },
   { to: '/analytics',     labelKey: 'nav.analytics',    icon: 'analytics' },

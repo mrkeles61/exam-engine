@@ -36,7 +36,6 @@ import type {
 import { GradeBadge } from '../components/StatusBadge';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { handwritingStyle } from '../utils/handwriting';
-import ExamShapedScan from '../components/results/ExamShapedScan';
 import OCROutputCard from '../components/results/OCROutputCard';
 import { saveLastReviewed } from '../utils/continueResume';
 
@@ -764,21 +763,18 @@ function ScanViewer({
         </div>
       </div>
 
-      {/* Page canvas — full IKU-shaped exam scan (header + QR + bullseyes + student number + content) */}
-      <div className="flex-1 overflow-auto bg-slate-200/40 p-4 flex justify-center">
-        <div className="w-full max-w-lg">
-          <ExamShapedScan
-            answers={questionsOnPage.length ? (questionsOnPage as AnswerDetail[]) : []}
-            activeQNum={activeAnswer?.question_number ?? null}
-            onSelectQuestion={onSelectQuestion}
-            pageIndex={activePage}
-            totalPages={totalPages}
-            courseCode={examMeta?.course_code ?? 'CSE201'}
-            courseName={examMeta?.course_name ?? ''}
-            examType={examMeta?.exam_type ?? 'Final'}
-            examDate={examMeta?.exam_date}
-            studentNumber={studentNumber}
-          />
+      {/* Page canvas — lightweight placeholder (the visual scan viewer is
+          supplied by an optional module that isn't part of this build). */}
+      <div className="flex-1 overflow-auto bg-slate-200/40 p-4 flex items-center justify-center">
+        <div className="w-full max-w-lg rounded-xl border border-dashed border-slate-300 bg-white/70 p-10 text-center shadow-sm">
+          <span className="material-symbols-outlined text-4xl text-slate-400">description</span>
+          <p className="mt-3 text-sm font-semibold text-slate-700">
+            {examMeta?.course_code ? `${examMeta.course_code} — ` : ''}
+            {examMeta?.exam_type ?? 'Exam'} · Page {activePage} / {totalPages}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Student {studentNumber ?? '—'} · {questionsOnPage.length} question{questionsOnPage.length === 1 ? '' : 's'} on this page
+          </p>
         </div>
       </div>
 

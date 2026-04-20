@@ -86,18 +86,25 @@ def _letter_grade(pct: float) -> str:
 
 
 # Flow-layout tunables — shared between frontend preview and backend seeder.
+# 2-column masonry: mc/ms/fill pack shortest-column-first into two columns;
+# match/open span the full content width.
 _PAGE_TOP_PAGE1 = 0.28   # reserve top 28% of page 1 for IKU header
 _PAGE_TOP_OTHER = 0.08   # subsequent pages start at 8%
 _PAGE_BOTTOM = 0.94
-_PAGE_LEFT = 0.08
-_PAGE_WIDTH = 0.84
+_LEFT_X = 0.06
+_GUTTER = 0.02
+_COL_WIDTH = round((1 - 2 * _LEFT_X - _GUTTER) / 2, 4)   # ≈ 0.43
+_FULL_WIDTH = round(1 - 2 * _LEFT_X, 4)                  # ≈ 0.88
 _VERTICAL_GAP = 0.01     # between questions
+
+_WIDE_TYPES = {"match", "open"}
 
 _HEIGHT_BY_TYPE = {
     "mc": 0.075,
     "ms": 0.085,
     "fill": 0.11,
     "match": 0.22,
+    # open is dynamic — handled inline in _height_for
 }
 
 
@@ -110,7 +117,7 @@ def _height_for(q: dict) -> float:
             space = int(space)
         except (TypeError, ValueError):
             space = 0
-        h = 0.24 + 0.04 * space if space > 0 else 0.34
+        h = 0.24 + 0.04 * space
     else:
         h = _HEIGHT_BY_TYPE.get(qtype, 0.1)
     if q.get("image_url"):
@@ -120,26 +127,58 @@ def _height_for(q: dict) -> float:
 
 def _flow_bbox(answers_in_order: List[dict]) -> None:
     """
-    Assign a `bbox` to every answer in document order (by question_number).
-    Mutates the list in place. Pages flow like a real exam: page 1 reserves
-    the top for the IKU header; subsequent pages start just below the margin.
+    Assign a `bbox` to every answer using a 2-column masonry packer:
+      - mc / ms / fill pack into left/right columns (shortest-column-first).
+      - match / open span the full content width and "close" both columns.
+
+    Mutates the list in place, sorted by question_number. Page 1 reserves a
+    tall header band; subsequent pages start near the top margin.
     """
     ordered = sorted(answers_in_order, key=lambda a: a.get("question_number", 0))
     page = 1
-    y = _PAGE_TOP_PAGE1
+    y_left = _PAGE_TOP_PAGE1
+    y_right = _PAGE_TOP_PAGE1
     for ans in ordered:
         h = _height_for(ans)
-        if y + h > _PAGE_BOTTOM:
-            page += 1
-            y = _PAGE_TOP_OTHER
-        ans["bbox"] = {
-            "page": page,
-            "x": _PAGE_LEFT,
-            "y": round(y, 4),
-            "w": _PAGE_WIDTH,
-            "h": round(h, 4),
-        }
-        y += h + _VERTICAL_GAP
+        is_wide = ans.get("question_type") in _WIDE_TYPES
+        if is_wide:
+            y = max(y_left, y_right)
+            if y + h > _PAGE_BOTTOM:
+                page += 1
+                y = _PAGE_TOP_OTHER
+                y_left = _PAGE_TOP_OTHER
+                y_right = _PAGE_TOP_OTHER
+            ans["bbox"] = {
+                "page": page,
+                "x": _LEFT_X,
+                "y": round(y, 4),
+                "w": _FULL_WIDTH,
+                "h": round(h, 4),
+            }
+            new_y = y + h + _VERTICAL_GAP
+            y_left = new_y
+            y_right = new_y
+        else:
+            use_left = y_left <= y_right
+            y = y_left if use_left else y_right
+            if y + h > _PAGE_BOTTOM:
+                page += 1
+                y = _PAGE_TOP_OTHER
+                y_left = _PAGE_TOP_OTHER
+                y_right = _PAGE_TOP_OTHER
+                use_left = True
+            ans["bbox"] = {
+                "page": page,
+                "x": _LEFT_X if use_left else round(_LEFT_X + _COL_WIDTH + _GUTTER, 4),
+                "y": round(y, 4),
+                "w": _COL_WIDTH,
+                "h": round(h, 4),
+            }
+            new_y = y + h + _VERTICAL_GAP
+            if use_left:
+                y_left = new_y
+            else:
+                y_right = new_y
 
 
 def _segmentation_confidence(student_id: str, question_number: int) -> float:

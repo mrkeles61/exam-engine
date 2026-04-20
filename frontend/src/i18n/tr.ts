@@ -110,6 +110,8 @@ export const tr = {
   'workspace.confidence.ocr': 'Metin OCR',
   'workspace.confidence.grading': 'Değerlendirme',
   'workspace.confidence.title': 'Güven Skorları',
+  'workspace.demoTag': 'DEMO',
+  'workspace.demoTooltip': 'Değerler simülasyon amaçlıdır — gerçek OCR/ML pipeline henüz sunucu tarafında çalışmıyor.',
 
   // Flag-region quick win
   'workspace.flagRegion': 'Bölgeyi Bildir',
@@ -213,6 +215,7 @@ export const tr = {
   'builder.preview.exportPdf': 'PDF Olarak İndir',
   'builder.preview.save': 'Kaydet',
   'builder.preview.saving': 'Kaydediliyor…',
+  'builder.preview.sampleName': 'Örnek Öğrenci',
 
   // Sidebar
   'builder.sidebar.title': 'Sorular ({n})',
