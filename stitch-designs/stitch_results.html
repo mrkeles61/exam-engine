@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Evaluation Results | Exam Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "on-background": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "primary": "#3525cd",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffd2be",
+                        "tertiary": "#7e3000",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary-container": "#5b597e",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "background": "#f7f9fb",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-secondary-fixed": "#191738",
+                        "secondary-fixed-dim": "#c6c2ed",
+                        "primary-fixed": "#e2dfff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-dim": "#d8dadc",
+                        "secondary": "#5d5b7f",
+                        "outline": "#777587",
+                        "surface-container": "#eceef0",
+                        "inverse-surface": "#2d3133",
+                        "on-surface": "#191c1e",
+                        "on-primary-fixed": "#0f0069",
+                        "on-surface-variant": "#464555",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#e3dfff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#454366",
+                        "inverse-primary": "#c3c0ff",
+                        "surface": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c7c4d8",
+                        "tertiary-container": "#a44100",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-fixed-variant": "#7b2f00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        /* Custom scrollbar for high density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c7c4d8; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar Anchor -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-[#0F0D2E] shadow-2xl shadow-black/20 flex flex-col p-4 z-50">
+<div class="mb-8 px-2">
+<h1 class="text-xl font-bold text-white tracking-wider">Exam Engine</h1>
+<p class="text-[10px] text-white/40 uppercase tracking-widest mt-1">Digital Proctor v2.1</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white rounded-lg font-semibold" href="#">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span class="text-sm">Evaluations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="text-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-white/10 space-y-1">
+<button class="w-full flex items-center justify-between px-4 py-2 bg-white/5 rounded-lg text-white/80 text-xs mb-4">
+<span>Search ⌘K</span>
+<span class="material-symbols-outlined text-[16px]">search</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="text-sm">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] min-h-screen bg-surface-container-low">
+<!-- TopAppBar Anchor (Partial Implementation) -->
+<header class="flex items-center justify-between w-full h-16 px-8 bg-surface-container-lowest/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center gap-4 text-xs font-medium text-on-surface-variant">
+<span>Dashboard</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Evaluations</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Results</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="professional portrait of a male data analyst in a clean modern office setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBin4MjFv01dOJpQAvmN33c_YPeOJwCyq5upX9NIAr3pje3y4mo_Zdbz1WQMneB3YQzaDlx1dNcT-gp12Or7KSIP09yXtdcycjpMZgYmfu1HDAMOx6ej6WygNS5aUWiXGtGuYp4qh4DZIapn9-wa4CBq8oLWP2F5R18gkzG-lrGnerH7dUahUJJ5T6TL2oDeJzLHYXXZzENgisQm_LHemahmMRnDRENUj3pcqPNHce07vg85ESOqOF1WXU2F2ffSCw6Fda3eD31x-I"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-[1400px] mx-auto space-y-8">
+<!-- Page Header -->
+<div class="flex items-end justify-between">
+<div class="space-y-1">
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Evaluation Results</h2>
+<p class="mono text-[12px] text-outline">JOB-9412-A8</p>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest text-on-surface rounded-lg text-sm font-semibold hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export CSV
+                </button>
+</div>
+<!-- Statistics Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Average Score -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border-l-4 border-primary shadow-sm">
+<p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Average Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold tracking-tight mono text-on-surface">44.3%</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">67 students participating</p>
+</div>
+<!-- Highest Score -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border-l-4 border-emerald-500 shadow-sm relative overflow-hidden">
+<p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Highest Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold tracking-tight mono text-on-surface">92.5%</span>
+</div>
+<span class="material-symbols-outlined absolute top-4 right-4 text-emerald-500/20 text-4xl">trophy</span>
+<p class="text-xs text-on-surface-variant mt-2">Top Performer: ID #8841</p>
+</div>
+<!-- Lowest Score -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border-l-4 border-amber-500 shadow-sm">
+<p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Lowest Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold tracking-tight mono text-on-surface">8.0%</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">Below threshold (12 students)</p>
+</div>
+<!-- Std Deviation -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border-l-4 border-purple-500 shadow-sm">
+<p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Std Deviation</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold tracking-tight mono text-on-surface">±18.2%</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">38% passed the final</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Grade Distribution Chart -->
+<div class="lg:col-span-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-semibold text-on-surface">Grade Distribution</h3>
+<span class="material-symbols-outlined text-outline cursor-help text-[18px]">info</span>
+</div>
+<div class="space-y-4">
+<!-- Chart Bar AA -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>AA</span>
+<span class="mono">4</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 15%"></div>
+</div>
+</div>
+<!-- Chart Bar BA -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>BA</span>
+<span class="mono">8</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-400 rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<!-- Chart Bar BB -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>BB</span>
+<span class="mono">12</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-500 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<!-- Chart Bar CB -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>CB</span>
+<span class="mono">16</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-400 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<!-- Chart Bar CC -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>CC</span>
+<span class="mono">14</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 52%"></div>
+</div>
+</div>
+<!-- Chart Bar DC -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>DC</span>
+<span class="mono">9</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-amber-400 rounded-full" style="width: 32%"></div>
+</div>
+</div>
+<!-- Chart Bar DD -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>DD</span>
+<span class="mono">3</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-orange-500 rounded-full" style="width: 10%"></div>
+</div>
+</div>
+<!-- Chart Bar FF -->
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-outline uppercase tracking-tighter">
+<span>FF</span>
+<span class="mono">1</span>
+</div>
+<div class="h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 4%"></div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<p class="text-[11px] text-on-surface-variant mono tracking-tight text-center">
+                            n=67 · Mean: CC · Median: DC
+                        </p>
+</div>
+</div>
+<!-- Student Results Table -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl shadow-sm flex flex-col overflow-hidden">
+<div class="p-6 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<h3 class="text-base font-semibold text-on-surface">Students (67)</h3>
+<div class="flex items-center bg-surface-container-low rounded-lg p-0.5">
+<button class="p-1.5 rounded-md bg-white shadow-sm text-primary">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+</button>
+<button class="p-1.5 rounded-md text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">density_medium</span>
+</button>
+</div>
+</div>
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search by name or ID..." type="text"/>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-full">All</button>
+<button class="px-3 py-1.5 bg-surface-container-low text-on-surface-variant text-xs font-medium rounded-full hover:bg-surface-container-high transition-colors">Passing</button>
+<button class="px-3 py-1.5 bg-surface-container-low text-on-surface-variant text-xs font-medium rounded-full hover:bg-surface-container-high transition-colors">Failing</button>
+<button class="px-3 py-1.5 bg-surface-container-low text-on-surface-variant text-xs font-medium rounded-full hover:bg-surface-container-high transition-colors">Needs Review</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-y border-outline-variant/10">
+<tr class="text-[11px] font-bold text-outline uppercase tracking-wider">
+<th class="px-6 py-4">#</th>
+<th class="px-4 py-4">Student ID</th>
+<th class="px-4 py-4">Name</th>
+<th class="px-4 py-4">MC Score</th>
+<th class="px-4 py-4">Open Score</th>
+<th class="px-4 py-4">Total %</th>
+<th class="px-4 py-4">Grade</th>
+<th class="px-6 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="text-[13px] divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">01</td>
+<td class="px-4 py-3.5 mono font-medium">8841-A</td>
+<td class="px-4 py-3.5 font-semibold">Alex Rivera</td>
+<td class="px-4 py-3.5 mono">48/50</td>
+<td class="px-4 py-3.5 mono">44/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">92.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500" style="width: 92%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-extrabold border border-emerald-100">AA</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">02</td>
+<td class="px-4 py-3.5 mono font-medium">9102-X</td>
+<td class="px-4 py-3.5 font-semibold">Sarah Chen</td>
+<td class="px-4 py-3.5 mono">45/50</td>
+<td class="px-4 py-3.5 mono">41/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">86.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500" style="width: 86%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-emerald-50 text-emerald-500 rounded text-[11px] font-extrabold border border-emerald-100">BA</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">03</td>
+<td class="px-4 py-3.5 mono font-medium">7742-L</td>
+<td class="px-4 py-3.5 font-semibold">Marcus Thorne</td>
+<td class="px-4 py-3.5 mono">38/50</td>
+<td class="px-4 py-3.5 mono">35/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">73.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-500" style="width: 73%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[11px] font-extrabold border border-blue-100">BB</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">04</td>
+<td class="px-4 py-3.5 mono font-medium">8823-J</td>
+<td class="px-4 py-3.5 font-semibold">Elena Rossi</td>
+<td class="px-4 py-3.5 mono">32/50</td>
+<td class="px-4 py-3.5 mono">33/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">65.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-400" style="width: 65%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-blue-50 text-blue-400 rounded text-[11px] font-extrabold border border-blue-100">CB</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">05</td>
+<td class="px-4 py-3.5 mono font-medium">6619-M</td>
+<td class="px-4 py-3.5 font-semibold">Jordan Smith</td>
+<td class="px-4 py-3.5 mono">28/50</td>
+<td class="px-4 py-3.5 mono">24/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">52.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-amber-500" style="width: 52%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[11px] font-extrabold border border-amber-100">CC</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">06</td>
+<td class="px-4 py-3.5 mono font-medium">5540-K</td>
+<td class="px-4 py-3.5 font-semibold">Priya Kapoor</td>
+<td class="px-4 py-3.5 mono">22/50</td>
+<td class="px-4 py-3.5 mono">23/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">45.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-amber-400" style="width: 45%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-amber-50 text-amber-500 rounded text-[11px] font-extrabold border border-amber-100">DC</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">07</td>
+<td class="px-4 py-3.5 mono font-medium">4401-B</td>
+<td class="px-4 py-3.5 font-semibold">Sven Nilsson</td>
+<td class="px-4 py-3.5 mono">19/50</td>
+<td class="px-4 py-3.5 mono">16/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">35.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-orange-500" style="width: 35%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-orange-50 text-orange-600 rounded text-[11px] font-extrabold border border-orange-100">DD</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="hover:bg-primary/5 transition-colors group bg-red-50/20">
+<td class="px-6 py-3.5 text-outline">08</td>
+<td class="px-4 py-3.5 mono font-medium">3312-W</td>
+<td class="px-4 py-3.5 font-semibold">Hassan Al-Fayed</td>
+<td class="px-4 py-3.5 mono">05/50</td>
+<td class="px-4 py-3.5 mono">03/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">8.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-red-500" style="width: 8%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-red-50 text-red-600 rounded text-[11px] font-extrabold border border-red-100">FF</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 9 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">09</td>
+<td class="px-4 py-3.5 mono font-medium">9941-C</td>
+<td class="px-4 py-3.5 font-semibold">Tess Gallagher</td>
+<td class="px-4 py-3.5 mono">31/50</td>
+<td class="px-4 py-3.5 mono">29/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">60.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-400" style="width: 60%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-blue-50 text-blue-400 rounded text-[11px] font-extrabold border border-blue-100">CB</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+<!-- Row 10 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-3.5 text-outline">10</td>
+<td class="px-4 py-3.5 mono font-medium">1029-D</td>
+<td class="px-4 py-3.5 font-semibold">Liam O'Connor</td>
+<td class="px-4 py-3.5 mono">27/50</td>
+<td class="px-4 py-3.5 mono">25/50</td>
+<td class="px-4 py-3.5">
+<div class="flex items-center gap-3">
+<span class="mono w-10">52.0</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-amber-500" style="width: 52%"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-3.5">
+<span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-[11px] font-extrabold border border-amber-100">CC</span>
+</td>
+<td class="px-6 py-3.5 text-right">
+<a class="text-primary font-bold hover:underline" href="#">Details →</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-6 bg-surface-container-lowest border-t border-outline-variant/10 flex items-center justify-between">
+<p class="text-[12px] text-on-surface-variant">Showing <span class="font-bold text-on-surface">1-10</span> of <span class="font-bold text-on-surface">67</span></p>
+<div class="flex gap-1">
+<button class="p-2 rounded-lg border border-outline-variant/20 text-outline hover:bg-surface-container-low transition-all disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-white text-xs font-bold shadow-md shadow-primary/20">1</button>
+<button class="w-8 h-8 rounded-lg text-xs font-bold text-on-surface hover:bg-surface-container-low transition-all">2</button>
+<button class="w-8 h-8 rounded-lg text-xs font-bold text-on-surface hover:bg-surface-container-low transition-all">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="w-8 h-8 rounded-lg text-xs font-bold text-on-surface hover:bg-surface-container-low transition-all">7</button>
+<button class="p-2 rounded-lg border border-outline-variant/20 text-outline hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

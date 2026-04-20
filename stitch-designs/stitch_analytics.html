@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analytics Dashboard - Academic Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#ffdbc7",
+                      "tertiary-container": "#5f2b00",
+                      "on-primary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface-bright": "#fbf9f8",
+                      "on-primary-container": "#9c9af4",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#3e1a00",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#dbd9d9",
+                      "surface-container-highest": "#e4e2e2",
+                      "on-surface-variant": "#474651",
+                      "on-secondary-fixed-variant": "#3a485b",
+                      "primary-fixed": "#e2dfff",
+                      "on-tertiary-fixed-variant": "#70380b",
+                      "background": "#fbf9f8",
+                      "surface-variant": "#e4e2e2",
+                      "surface-tint": "#5654a8",
+                      "secondary-fixed": "#d5e3fc",
+                      "outline": "#777682",
+                      "secondary": "#515f74",
+                      "primary-container": "#312e81",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#0d1c2e",
+                      "on-primary-fixed-variant": "#3e3c8f",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#efeded",
+                      "surface-container-low": "#f5f3f3",
+                      "secondary-container": "#d5e3fc",
+                      "inverse-on-surface": "#f2f0f0",
+                      "surface-container-high": "#eae8e7",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "primary": "#1a146b",
+                      "secondary-fixed-dim": "#b9c7df",
+                      "on-background": "#1b1c1c",
+                      "tertiary-fixed-dim": "#ffb688",
+                      "surface": "#fbf9f8",
+                      "on-tertiary-fixed": "#311300",
+                      "inverse-surface": "#303030",
+                      "on-tertiary-container": "#de915e",
+                      "on-tertiary": "#ffffff",
+                      "on-surface": "#1b1c1c",
+                      "on-primary-fixed": "#100563",
+                      "on-secondary-container": "#57657a",
+                      "inverse-primary": "#c3c0ff",
+                      "outline-variant": "#c8c5d3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Inter"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bell-curve {
+            clip-path: ellipse(50% 100% at 50% 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="bg-indigo-950 dark:bg-black h-screen w-64 fixed left-0 top-0 shadow-2xl flex flex-col py-8 px-4 z-50">
+<div class="mb-12">
+<h1 class="text-indigo-50 font-bold tracking-tighter text-xl">Academic Architect</h1>
+<p class="text-indigo-400 font-inter body-md tracking-tight">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 transition-colors duration-200 text-indigo-300 hover:bg-indigo-800/30 hover:text-white rounded" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-inter body-md tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 transition-colors duration-200 text-indigo-300 hover:bg-indigo-800/30 hover:text-white rounded" href="#">
+<span class="material-symbols-outlined">cloud_upload</span>
+<span class="font-inter body-md tracking-tight">Upload</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 transition-colors duration-200 text-indigo-300 hover:bg-indigo-800/30 hover:text-white rounded" href="#">
+<span class="material-symbols-outlined">grading</span>
+<span class="font-inter body-md tracking-tight">Evaluations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 transition-colors duration-200 text-indigo-300 hover:bg-indigo-800/30 hover:text-white rounded" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="font-inter body-md tracking-tight">Answer Keys</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 transition-colors duration-200 text-white bg-indigo-800/50 font-semibold rounded" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-inter body-md tracking-tight">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full bg-primary-container text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Exam
+            </button>
+<div class="mt-6 flex items-center gap-3 px-2">
+<div class="h-10 w-10 rounded-full bg-indigo-800 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of an administrator with a professional and friendly expression in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOJjayWe4ET8jWjG2j7l_zucYKKltIEa3B7Q2C3U16r70HOFWr6HYHGhMHDCF4PM3BUk9vl26Asbajsh4qS3eIhXnwAQTzGhBae5Oo-SFxx2ejlBhAYklKvwIGg9NnTc9uAioYZEYOqaqgwnLV8k6AFhIM65t6nVP7DTcxhXiiiwP9L10g4SSRNdaeV2EbNUaZDRGKDVNoYqmn_fIfStBrSNTPAlWpsibX1RCtDxAI0QduRa8w2mX14biFd_HIsCt3BnwaCvlE9oo"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-indigo-50 text-sm font-medium truncate">User profile</p>
+<p class="text-indigo-400 text-xs truncate">Head Proctor</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-stone-50 dark:bg-stone-900 flex justify-between items-center h-20 px-12">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-indigo-900 dark:text-white">The Digital Proctor</span>
+<nav class="flex gap-6">
+<a class="headline-sm font-semibold tracking-tight text-stone-500 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all duration-150" href="#">Term 1</a>
+<a class="headline-sm font-semibold tracking-tight text-stone-500 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all duration-150" href="#">Term 2</a>
+<a class="headline-sm font-semibold tracking-tight text-indigo-900 border-b-2 border-indigo-900 transition-all duration-150" href="#">Finals</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-surface-container-high px-4 py-2 rounded-lg text-indigo-900 font-medium hover:bg-surface-container-highest transition-colors">Exam Selector</button>
+<div class="flex items-center gap-2 text-stone-500">
+<button class="p-2 hover:bg-stone-100 rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 hover:bg-stone-100 rounded-full transition-colors"><span class="material-symbols-outlined">settings</span></button>
+</div>
+</div>
+</header>
+<div class="mt-20 p-12 space-y-8 max-w-[1400px] mx-auto w-full">
+<!-- Breadcrumb & Title -->
+<div class="flex items-end justify-between">
+<div>
+<nav class="flex text-label-md text-stone-500 mb-2 uppercase tracking-widest font-medium">
+<span>Exams</span>
+<span class="mx-2">/</span>
+<span>BM301 Business Management</span>
+</nav>
+<div class="flex items-center gap-4">
+<h2 class="display-md text-on-surface">BM301 2024 Midterm</h2>
+<button class="p-1 hover:bg-surface-container rounded transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="secondary bg-surface-container-high text-on-surface px-6 py-2 rounded-lg font-semibold hover:bg-surface-container-highest transition-colors">Export PDF</button>
+<button class="primary bg-gradient-to-r from-[#1a146b] to-[#312e81] text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">Share Report</button>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="grid grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<p class="label-md text-stone-500 uppercase tracking-wider mb-2">Total Students</p>
+<h3 class="text-4xl font-bold text-on-surface">67</h3>
+<p class="text-xs text-stone-400 mt-2">Active enrollments</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<p class="label-md text-stone-500 uppercase tracking-wider mb-2">Class Average</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-4xl font-bold text-on-surface">44.3%</h3>
+<span class="text-sm font-semibold text-error">-12% vs target</span>
+</div>
+<p class="text-xs text-stone-400 mt-2">Target: 56.0%</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<p class="label-md text-stone-500 uppercase tracking-wider mb-2">Pass Rate</p>
+<h3 class="text-4xl font-bold text-on-surface">38%</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4">
+<div class="bg-primary h-full rounded-full w-[38%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<p class="label-md text-stone-500 uppercase tracking-wider mb-2">Reliability Index</p>
+<div class="flex items-center gap-3">
+<h3 class="text-4xl font-bold text-on-surface">0.72</h3>
+<span class="px-2 py-0.5 bg-tertiary-container text-tertiary-fixed-dim rounded-full text-[10px] font-bold uppercase">Cronbach's alpha</span>
+</div>
+<p class="text-xs text-secondary mt-2">Highly Reliable</p>
+</div>
+</div>
+<!-- Main Score Distribution Chart -->
+<div class="bg-surface-container-lowest p-8 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h4 class="headline-sm font-semibold">Score Distribution</h4>
+<p class="body-md text-stone-500">n=67 · Mean: 44.3% · Median: 41.0% · σ: 18.2%</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-indigo-100"></span>
+<span class="text-xs text-stone-500">Actual Density</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-xs text-stone-500">Normal Curve</span>
+</div>
+</div>
+</div>
+<div class="relative h-64 w-full mt-10">
+<!-- Histogram Bars (Faded Background) -->
+<div class="absolute inset-0 flex items-end gap-1 px-4">
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[20%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[35%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-indigo-100 rounded-t h-[85%]"></div>
+<div class="flex-1 bg-indigo-100 rounded-t h-[75%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[25%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[15%]"></div>
+<div class="flex-1 bg-indigo-50/50 rounded-t h-[5%]"></div>
+</div>
+<!-- Bell Curve Overlay -->
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none">
+<path d="M 0 256 Q 200 256 300 150 T 500 50 T 700 150 T 1400 256" fill="transparent" stroke="#1a146b" stroke-width="3"></path>
+<!-- Mean Line -->
+<line stroke="#1a146b" stroke-dasharray="4" stroke-width="1.5" x1="44.3%" x2="44.3%" y1="0" y2="100%"></line>
+<!-- Median Line -->
+<line stroke="#777682" stroke-dasharray="4" stroke-width="1.5" x1="41%" x2="41%" y1="0" y2="100%"></line>
+</svg>
+<!-- Labels -->
+<div class="absolute top-0 left-[44.3%] -ml-12 text-center">
+<span class="text-[10px] font-bold text-primary uppercase bg-white px-2">Mean 44.3%</span>
+</div>
+<div class="absolute bottom-0 left-[41%] -ml-12 text-center translate-y-6">
+<span class="text-[10px] font-bold text-stone-500 uppercase bg-white px-2">Median 41.0%</span>
+</div>
+</div>
+<div class="flex justify-between mt-12 px-4 border-t border-stone-100 pt-4 text-[10px] font-medium text-stone-400">
+<span>0%</span>
+<span>10%</span>
+<span>20%</span>
+<span>30%</span>
+<span>40%</span>
+<span>50%</span>
+<span>60%</span>
+<span>70%</span>
+<span>80%</span>
+<span>90%</span>
+<span>100%</span>
+</div>
+</div>
+<!-- Lower Detail Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Question Difficulty Analysis -->
+<div class="col-span-7 bg-surface-container-lowest p-8 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<h4 class="headline-sm font-semibold mb-8">Question Difficulty Analysis</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<span class="w-24 text-sm font-medium text-stone-600">Q7 (Open)</span>
+<div class="flex-1 bg-stone-100 h-6 rounded overflow-hidden">
+<div class="bg-red-500 h-full flex items-center justify-end px-3 text-white text-[10px] font-bold" style="width: 18%">18%</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-24 text-sm font-medium text-stone-600">Q4 (MC)</span>
+<div class="flex-1 bg-stone-100 h-6 rounded overflow-hidden">
+<div class="bg-red-500 h-full flex items-center justify-end px-3 text-white text-[10px] font-bold" style="width: 24%">24%</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-24 text-sm font-medium text-stone-600">Q12 (MC)</span>
+<div class="flex-1 bg-stone-100 h-6 rounded overflow-hidden">
+<div class="bg-amber-500 h-full flex items-center justify-end px-3 text-white text-[10px] font-bold" style="width: 42%">42%</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-24 text-sm font-medium text-stone-600">Q1 (MC)</span>
+<div class="flex-1 bg-stone-100 h-6 rounded overflow-hidden">
+<div class="bg-amber-500 h-full flex items-center justify-end px-3 text-white text-[10px] font-bold" style="width: 65%">65%</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-24 text-sm font-medium text-stone-600">Q16 (Open)</span>
+<div class="flex-1 bg-stone-100 h-6 rounded overflow-hidden">
+<div class="bg-emerald-500 h-full flex items-center justify-end px-3 text-white text-[10px] font-bold" style="width: 78%">78%</div>
+</div>
+</div>
+</div>
+<div class="mt-10 flex gap-6 pt-6 border-t border-stone-100">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded bg-red-500"></span>
+<span class="text-xs text-stone-500">Critical (&lt;40%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded bg-amber-500"></span>
+<span class="text-xs text-stone-500">Average (40-70%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded bg-emerald-500"></span>
+<span class="text-xs text-stone-500">Optimal (&gt;70%)</span>
+</div>
+</div>
+</div>
+<!-- Grade Distribution -->
+<div class="col-span-5 bg-surface-container-lowest p-8 rounded-lg shadow-[0_12px_32px_-4px_rgba(27,28,28,0.06)] border border-outline-variant/15">
+<h4 class="headline-sm font-semibold mb-8">Grade Distribution</h4>
+<div class="flex gap-8 items-center">
+<div class="relative w-40 h-40">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#f5f3f3" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#1a146b" stroke-dasharray="15 85" stroke-dashoffset="0" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#5654a8" stroke-dasharray="25 75" stroke-dashoffset="-15" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#9c9af4" stroke-dasharray="30 70" stroke-dashoffset="-40" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#e2dfff" stroke-dasharray="30 70" stroke-dashoffset="-70" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold">FF</span>
+<span class="text-[10px] text-stone-400 uppercase font-bold tracking-widest">Modal</span>
+</div>
+</div>
+<div class="flex-1">
+<table class="w-full text-sm">
+<thead class="text-stone-400 text-left border-b border-stone-100">
+<tr>
+<th class="pb-2 font-medium">Grade</th>
+<th class="pb-2 font-medium">Count</th>
+<th class="pb-2 font-medium text-right">%</th>
+</tr>
+</thead>
+<tbody class="text-on-surface">
+<tr class="border-b border-stone-50">
+<td class="py-3 flex items-center gap-2 font-semibold">
+<span class="w-2 h-2 rounded-full bg-indigo-900"></span> AA
+                                        </td>
+<td class="py-3">10</td>
+<td class="py-3 text-right">15%</td>
+</tr>
+<tr class="border-b border-stone-50">
+<td class="py-3 flex items-center gap-2 font-semibold">
+<span class="w-2 h-2 rounded-full bg-indigo-700"></span> BB
+                                        </td>
+<td class="py-3">17</td>
+<td class="py-3 text-right">25%</td>
+</tr>
+<tr class="border-b border-stone-50">
+<td class="py-3 flex items-center gap-2 font-semibold">
+<span class="w-2 h-2 rounded-full bg-indigo-400"></span> CC
+                                        </td>
+<td class="py-3">20</td>
+<td class="py-3 text-right">30%</td>
+</tr>
+<tr>
+<td class="py-3 flex items-center gap-2 font-semibold text-error">
+<span class="w-2 h-2 rounded-full bg-indigo-100"></span> FF
+                                        </td>
+<td class="py-3">20</td>
+<td class="py-3 text-right">30%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Insights Section -->
+<section class="bg-indigo-50/60 rounded-xl p-10 border border-indigo-100/50 backdrop-blur-sm">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-indigo-700">auto_awesome</span>
+<h4 class="text-xl font-bold text-indigo-900">AI Insights</h4>
+</div>
+<button class="bg-white text-indigo-900 border border-indigo-200 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-100 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                        Regenerate Insights
+                    </button>
+</div>
+<div class="grid grid-cols-2 gap-x-12 gap-y-6">
+<div class="bg-white/40 p-4 rounded-lg border border-indigo-100/50">
+<blockquote class="text-on-surface italic body-md leading-relaxed">
+                            "Questions 4, 7, and 12 had significantly lower scores than predicted by the curriculum mapping, suggesting a gap in Term 1 instructional coverage."
+                        </blockquote>
+</div>
+<div class="bg-white/40 p-4 rounded-lg border border-indigo-100/50">
+<blockquote class="text-on-surface italic body-md leading-relaxed">
+                            "Open-ended Q16 showed high variance across markers; consider a calibration session to ensure grading consistency for future evaluations."
+                        </blockquote>
+</div>
+<div class="bg-white/40 p-4 rounded-lg border border-indigo-100/50">
+<blockquote class="text-on-surface italic body-md leading-relaxed">
+                            "15 students scored below 25%, marking a critical failure cluster. Automated remedial path suggestions have been generated for these candidates."
+                        </blockquote>
+</div>
+<div class="bg-white/40 p-4 rounded-lg border border-indigo-100/50">
+<blockquote class="text-on-surface italic body-md leading-relaxed">
+                            "MC questions had 92% OCR accuracy. The remaining 8% require manual verification due to non-standard bubbling patterns in the exam sheets."
+                        </blockquote>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Padding -->
+<div class="h-24"></div>
+</main>
+</body></html>

@@ -4,8 +4,18 @@
     {
       "name": "exam-engine-frontend",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev", "--prefix", "frontend"],
       "port": 3000
+    },
+    {
+      "name": "iku-renderer-only",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "--config",
+        "../iku-exam-generator/vite.preview.config.ts"
+      ],
+      "port": 3100
     }
   ]
 }

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pipeline Monitor - The Academic Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-background": "#1b1c1c",
+                        "primary-container": "#312e81",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "surface-tint": "#5654a8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#70380b",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-bright": "#fbf9f8",
+                        "outline": "#777682",
+                        "on-tertiary-fixed": "#311300",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "secondary": "#515f74",
+                        "on-secondary-container": "#57657a",
+                        "inverse-surface": "#303030",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface-variant": "#474651",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-primary-fixed-variant": "#3e3c8f",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-tertiary-container": "#de915e",
+                        "secondary-fixed": "#d5e3fc",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#eae8e7",
+                        "surface-container": "#efeded",
+                        "background": "#fbf9f8",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#9c9af4",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-container-low": "#f5f3f3",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#5f2b00",
+                        "surface-dim": "#dbd9d9",
+                        "on-surface": "#1b1c1c",
+                        "on-primary-fixed": "#100563",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary": "#3e1a00",
+                        "primary": "#1a146b",
+                        "outline-variant": "#c8c5d3",
+                        "on-error": "#ffffff",
+                        "surface": "#fbf9f8"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .tonal-transition { transition: background-color 0.2s ease; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .terminal-bg { background-color: #0A0A0B; }
+        .node-connector {
+            background-image: linear-gradient(to right, #312e81 33%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="bg-indigo-950 dark:bg-slate-900 h-screen w-64 left-0 top-0 fixed flex flex-col h-full py-6 px-4 z-40">
+<div class="flex items-center gap-3 px-2 mb-10">
+<div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<div>
+<h2 class="text-xl font-bold text-white leading-none">Exam Engine</h2>
+<p class="text-[10px] text-indigo-300 uppercase tracking-widest mt-1">Active Proctoring</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Pipeline Overview - ACTIVE -->
+<a class="bg-white/10 text-white rounded-lg backdrop-blur-md flex items-center gap-3 px-3 py-2.5 transition-all duration-300 translate-x-1" href="#">
+<span class="material-symbols-outlined text-lg">lan</span>
+<span class="font-inter text-sm font-medium tracking-wide">Pipeline Overview</span>
+</a>
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2.5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">visibility</span>
+<span class="font-inter text-sm font-medium tracking-wide">AI Proctoring</span>
+</a>
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2.5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">sync</span>
+<span class="font-inter text-sm font-medium tracking-wide">Candidate Sync</span>
+</a>
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2.5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">psychology</span>
+<span class="font-inter text-sm font-medium tracking-wide">Result Engine</span>
+</a>
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2.5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">terminal</span>
+<span class="font-inter text-sm font-medium tracking-wide">Security Logs</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5 space-y-1">
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">cloud_done</span>
+<span class="font-inter text-sm font-medium tracking-wide">System Status</span>
+</a>
+<a class="text-indigo-300 hover:text-white hover:bg-white/5 flex items-center gap-3 px-3 py-2 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-lg">help_outline</span>
+<span class="font-inter text-sm font-medium tracking-wide">Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar (Authority Source: JSON) -->
+<header class="bg-stone-50/60 dark:bg-slate-950/60 backdrop-blur-xl docked full-width top-0 sticky z-50 flex justify-between items-center px-8 h-16 w-full tonal-transition">
+<div class="flex items-center gap-4">
+<button class="hover:bg-stone-100 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-stone-500">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-3">
+<h1 class="text-lg font-bold tracking-tighter text-indigo-900 dark:text-white">BM301 2024 Midterm Exam</h1>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Processing</span>
+</div>
+<p class="text-xs text-stone-500 font-medium">67 students · Started 3 min ago</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-indigo-700 dark:text-indigo-400 font-semibold border-b-2 border-indigo-700 dark:border-indigo-400 pb-1 font-inter tracking-tight body-md" href="#">Dashboard</a>
+<a class="text-stone-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-indigo-200 font-inter tracking-tight body-md" href="#">Analytics</a>
+<a class="text-stone-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-indigo-200 font-inter tracking-tight body-md" href="#">Logs</a>
+<a class="text-stone-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-indigo-200 font-inter tracking-tight body-md" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-3 ml-4">
+<span class="material-symbols-outlined text-stone-500 hover:text-stone-900 cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-stone-500 hover:text-stone-900 cursor-pointer">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Hero: Pipeline Nodes -->
+<section class="px-8 py-10 bg-surface-container-low overflow-hidden relative">
+<!-- Decorative background element -->
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-5 pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="abstract tech schematic with glowing circuits and connected nodes in deep indigo and white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1mKMcHGi-4Utb3RPuYv_Hado2ET29mI78SgwGis0_LljI93FWwq9EHvhncj9_jaQaFhbchsBHyTULIllIPgwtZPJKlYD48qu9vmw-lhUzh5y1PgzBaBNmb-VOZI5dkA2wRegFGJaR79ug-fIbEzmXEAVUG1bi5Dut9qfHQCK-2lM0hTekhB7fGO6uHgC-XSKqoGTAjTIrVrlP5U_WagNTOczk74TnkxKwDpih9Ml55xT0mjvS3hedIbHcp4CWtv8DTet04vXIbZw"/>
+</div>
+<div class="relative z-10">
+<div class="flex items-center justify-between gap-4 max-w-6xl mx-auto">
+<!-- Node 1 -->
+<div class="flex-1 flex flex-col items-center">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 w-full shadow-sm">
+<div class="flex items-start justify-between mb-4">
+<div>
+<h3 class="text-sm font-semibold text-on-surface">OCR Text Extraction</h3>
+<p class="text-[10px] text-stone-500 uppercase tracking-wider font-medium">Tesseract OCR + PaddleOCR</p>
+</div>
+<span class="material-symbols-outlined text-emerald-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-2xl font-bold text-indigo-900 tracking-tighter">67/67</span>
+<span class="text-xs text-stone-400">pages</span>
+</div>
+<div class="flex items-center justify-between mt-4 text-[11px] font-medium">
+<span class="text-stone-500">Duration: 1m 24s</span>
+<a class="text-error flex items-center gap-1 hover:underline" href="#">
+<span class="material-symbols-outlined text-sm">warning</span> 3 low-confidence
+                                </a>
+</div>
+</div>
+</div>
+<!-- Connector -->
+<div class="w-12 h-[1px] node-connector self-center opacity-30"></div>
+<!-- Node 2 -->
+<div class="flex-1 flex flex-col items-center">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 w-full shadow-sm">
+<div class="flex items-start justify-between mb-4">
+<div>
+<h3 class="text-sm font-semibold text-on-surface">Layout Analysis</h3>
+<p class="text-[10px] text-stone-500 uppercase tracking-wider font-medium">LayoutParser</p>
+</div>
+<span class="material-symbols-outlined text-emerald-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-2xl font-bold text-indigo-900 tracking-tighter">67</span>
+<span class="text-xs text-stone-400">answer sheets parsed</span>
+</div>
+<div class="flex items-center justify-between mt-4 text-[11px] font-medium">
+<span class="text-stone-500">Duration: 0m 38s</span>
+<span class="text-stone-400 italic">Success</span>
+</div>
+</div>
+</div>
+<!-- Connector -->
+<div class="w-12 h-[1px] node-connector self-center opacity-30"></div>
+<!-- Node 3: ACTIVE -->
+<div class="flex-1 flex flex-col items-center">
+<div class="bg-surface-container-lowest p-6 rounded-xl border-2 border-primary ring-4 ring-primary/5 w-full shadow-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/10">
+<div class="h-full bg-primary w-1/2"></div>
+</div>
+<div class="flex items-start justify-between mb-4">
+<div>
+<h3 class="text-sm font-semibold text-on-surface">AI Evaluation</h3>
+<p class="text-[10px] text-stone-500 uppercase tracking-wider font-medium">Mistral-7B-Q4 via llama.cpp</p>
+</div>
+<span class="material-symbols-outlined text-primary animate-spin">progress_activity</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="text-2xl font-bold text-indigo-900 tracking-tighter">34/67</span>
+<span class="text-xs text-stone-400">students (51%)</span>
+</div>
+<div class="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden mb-4">
+<div class="bg-primary h-full w-[51%] rounded-full"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-medium">
+<span class="text-stone-500">~2 min remaining</span>
+<span class="text-primary-container font-bold">2.1 std/min</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Log Viewer Section -->
+<section class="flex-1 px-8 py-8 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-stone-500">terminal</span>
+<h2 class="headline-sm text-on-surface font-semibold">Pipeline Logs</h2>
+</div>
+<div class="flex items-center gap-4">
+<label class="flex items-center gap-2 cursor-pointer group">
+<span class="text-xs font-medium text-stone-500 group-hover:text-stone-700">Auto-scroll</span>
+<div class="w-8 h-4 bg-primary rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+</div>
+</label>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded bg-surface-container-high text-on-surface text-xs font-medium hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Download Logs
+                    </button>
+</div>
+</div>
+<!-- Terminal Component -->
+<div class="terminal-bg rounded-xl p-6 font-mono text-[13px] leading-relaxed text-stone-300 flex-1 overflow-y-auto max-h-[400px] border border-white/5 shadow-2xl">
+<div class="flex gap-4">
+<span class="text-stone-600 shrink-0">14:02:11</span>
+<span class="text-emerald-500 shrink-0">[INFO]</span>
+<span>Worker pool initialized. 4 threads assigned to Mistral LLM.</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:02:12</span>
+<span class="text-indigo-400 shrink-0">[OCR]</span>
+<span>Completed processing batch #5 (8 students). Confidence score: 0.982</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:02:45</span>
+<span class="text-amber-400 shrink-0">[WARN]</span>
+<span class="text-amber-100/80">Low confidence detection on Student #23 Page 2. Artifacts detected in margins.</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:03:01</span>
+<span class="text-indigo-400 shrink-0">[AI]</span>
+<span>Evaluating Student #30: Responses for Q1-Q10 extracted. Starting grading pass...</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:03:15</span>
+<span class="text-indigo-400 shrink-0">[AI]</span>
+<span>Student #30 evaluation complete. Score generated: 84/100.</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:03:22</span>
+<span class="text-emerald-500 shrink-0">[INFO]</span>
+<span>Pipeline sync with Database complete. 34 records updated.</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:03:45</span>
+<span class="text-indigo-400 shrink-0">[AI]</span>
+<span>Processing Student #35: Extraction successful. Running cross-reference check...</span>
+</div>
+<div class="flex gap-4 mt-1">
+<span class="text-stone-600 shrink-0">14:04:02</span>
+<span class="text-stone-500 animate-pulse">_</span>
+</div>
+</div>
+</section>
+<!-- Footer Alert -->
+<div class="px-8 pb-8">
+<div class="bg-tertiary-container/30 border border-tertiary-fixed-dim/20 rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed">warning</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-tertiary-container">Action Required</h4>
+<p class="text-xs text-on-tertiary-container/80">Student #23: Low OCR confidence (72%) on Question 5. Result might be inaccurate.</p>
+</div>
+</div>
+<button class="bg-primary text-white px-5 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all active:scale-95">
+                    Review Now
+                </button>
+</div>
+</div>
+</main>
+</body></html>

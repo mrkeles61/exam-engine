@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Answer Key Management | Exam Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e4e2e2",
+                    "primary": "#1a146b",
+                    "surface-tint": "#5654a8",
+                    "primary-container": "#312e81",
+                    "outline-variant": "#c8c5d3",
+                    "outline": "#777682",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "inverse-primary": "#c3c0ff",
+                    "on-surface-variant": "#474651",
+                    "on-tertiary-container": "#de915e",
+                    "surface": "#fbf9f8",
+                    "on-tertiary-fixed": "#311300",
+                    "inverse-on-surface": "#f2f0f0",
+                    "tertiary-fixed": "#ffdbc7",
+                    "secondary-container": "#d5e3fc",
+                    "inverse-surface": "#303030",
+                    "surface-dim": "#dbd9d9",
+                    "on-primary-fixed-variant": "#3e3c8f",
+                    "surface-container-high": "#eae8e7",
+                    "tertiary-container": "#5f2b00",
+                    "on-tertiary-fixed-variant": "#70380b",
+                    "surface-container": "#efeded",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "error": "#ba1a1a",
+                    "background": "#fbf9f8",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f5f3f3",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#d5e3fc",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e4e2e2",
+                    "on-primary-container": "#9c9af4",
+                    "surface-bright": "#fbf9f8",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#3e1a00",
+                    "tertiary-fixed-dim": "#ffb688",
+                    "primary-fixed": "#e2dfff",
+                    "on-surface": "#1b1c1c",
+                    "on-primary-fixed": "#100563",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "secondary": "#515f74",
+                    "on-secondary-container": "#57657a",
+                    "on-background": "#1b1c1c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-active {
+            box-shadow: inset 4px 0 0 0 #1a146b;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col fixed left-0 top-0 h-full py-6 px-4 bg-stone-100 dark:bg-stone-900 h-screen w-64 border-r-0 z-50">
+<div class="mb-10 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="architecture">architecture</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-indigo-900 dark:text-indigo-200 leading-tight">Proctor AI</h1>
+<p class="text-[10px] uppercase tracking-widest text-stone-500 font-semibold">Academic Architect</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items mapped from JSON -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+                Upload Exam
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+                Evaluations
+            </a>
+<!-- Active Navigation Item -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-indigo-900 dark:text-indigo-300 font-semibold bg-white/50 dark:bg-white/5 transition-colors text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+                Answer Keys
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analytics
+            </a>
+</nav>
+<div class="mt-auto border-t border-stone-200 pt-6 px-4">
+<div class="flex items-center gap-3 group cursor-pointer">
+<span class="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors" data-icon="account_circle" style="font-size: 32px;">account_circle</span>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-stone-700">Dr. Admin</span>
+<span class="text-xs text-stone-500">Premium Plan</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center w-full pl-72 pr-8 h-16 sticky top-0 z-40 bg-white/60 backdrop-blur-md border-b border-stone-200/15">
+<div class="flex items-center">
+<h2 class="text-lg font-bold text-indigo-900 tracking-tight">Answer Key Management</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-stone-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-indigo-700 transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-indigo-700 transition-colors" data-icon="help_outline">help_outline</span>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2 rounded-lg font-semibold text-sm hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                Create New Key
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-screen bg-surface">
+<!-- Hero Section / Title -->
+<div class="max-w-6xl mx-auto mb-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-bold text-on-surface tracking-tight mb-2">Answer Keys</h2>
+<p class="text-stone-500 text-sm">Manage answer key templates for automated grading and validation.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<img alt="User" class="w-8 h-8 rounded-full border-2 border-white" data-alt="close up of a professional academic administrator in a modern office setting, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeOuH-l26ZzjTEJY7DufgCymyEWKpSPzHDW6HRDzdcJLUzerhGZzgU6OE-g0p5mH1mviKBoE5aB_B9rdLJB3GVTKbyzwNd-TDTP42i29by5bYScVfs9JW1SbjaELEz7UNnpoIeq_OGyPVrbzIKGkYKXWXx9DWRxu9hpuv3cHnut-J_-wiwsS2jdyfF1oG-w_8EJHYahAnzja8utzd-ioAVy9wUXaF--59Lf_GGojxMLKMKGITlcHLnTMZ2uKh5qVhIb3s3x31eIc8"/>
+<img alt="User" class="w-8 h-8 rounded-full border-2 border-white" data-alt="professional woman wearing spectacles in a classroom environment, warm desk lamp lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmaZc8hrgu95k_l1ivB6e8EQPISVFZqImtKlGATl-_1E-_gD1F9LoVIOKQdT_r67FpXzmLcl-cGTBLErlMOcj0KJtM_djqgK7TX5NV73OiDNKddAecAnOsu1EDg3yvRrEB7LxrF88ThFtCKsoLJ2nN9YwrX-wJVV0bxEX3QSOTmHvt6fKqKGA31DKfpd5PNBOtIKZZ-bYD8mD-Ea8u66DRuVoA2hNCui1ahzcMrXu6C0dDT7-6VZtYuAEv1oWkRhI6z90nOX-yBsA"/>
+</div>
+<span class="text-xs text-stone-400 font-medium">+3 editors</span>
+</div>
+</div>
+</div>
+<!-- Filters & Search Bar (Clean Notion-like bar) -->
+<div class="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row gap-4 items-center">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-lg" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search templates..." type="text"/>
+</div>
+<div class="flex gap-2 ml-auto overflow-x-auto w-full md:w-auto">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-xs font-medium text-stone-600 hover:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                    All Types
+                </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-xs font-medium text-stone-600 hover:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="sort">sort</span>
+                    Last Modified
+                </button>
+</div>
+</div>
+<!-- Answer Key Cards Grid (2-column grid of cards) -->
+<div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border-l-4 border-indigo-600 shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+<div class="p-5 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-semibold text-on-surface mb-1">Final Exam: Organic Chemistry II</h3>
+<p class="text-[12px] text-stone-500">Modified 2 hours ago by Dr. Smith</p>
+</div>
+<span class="material-symbols-outlined text-stone-300 group-hover:text-indigo-600 transition-colors" data-icon="lock_open">lock_open</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="text-[13px] font-medium text-stone-600">20 questions · Mixed type</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold">15 MC</span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[11px] font-bold">5 Open</span>
+</div>
+</div>
+<div class="px-5 py-3 bg-surface-container-low rounded-b-xl flex justify-between items-center">
+<div class="flex gap-4">
+<button class="text-[12px] font-semibold text-indigo-900 flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span> Edit
+                        </button>
+<button class="text-[12px] font-semibold text-stone-500 flex items-center gap-1 hover:text-stone-700">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span> Duplicate
+                        </button>
+</div>
+<button class="text-stone-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border-l-4 border-tertiary-container shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+<div class="p-5 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-semibold text-on-surface mb-1">Midterm Template: Modern Literature</h3>
+<p class="text-[12px] text-stone-500">Modified Aug 24, 2024</p>
+</div>
+<span class="material-symbols-outlined text-stone-300" data-icon="verified_user">verified_user</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="text-[13px] font-medium text-stone-600">50 questions · Multiple Choice</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold">50 MC</span>
+</div>
+</div>
+<div class="px-5 py-3 bg-surface-container-low rounded-b-xl flex justify-between items-center">
+<div class="flex gap-4">
+<button class="text-[12px] font-semibold text-indigo-900 flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span> Edit
+                        </button>
+<button class="text-[12px] font-semibold text-stone-500 flex items-center gap-1 hover:text-stone-700">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span> Duplicate
+                        </button>
+</div>
+<button class="text-stone-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border-l-4 border-secondary shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+<div class="p-5 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-semibold text-on-surface mb-1">Entrance Quiz: Advanced Calculus</h3>
+<p class="text-[12px] text-stone-500">Modified Oct 12, 2024</p>
+</div>
+<span class="material-symbols-outlined text-stone-300" data-icon="history">history</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<span class="text-[13px] font-medium text-stone-600">12 questions · Complex types</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold">4 MC</span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[11px] font-bold">8 Open</span>
+</div>
+</div>
+<div class="px-5 py-3 bg-surface-container-low rounded-b-xl flex justify-between items-center">
+<div class="flex gap-4">
+<button class="text-[12px] font-semibold text-indigo-900 flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span> Edit
+                        </button>
+<button class="text-[12px] font-semibold text-stone-500 flex items-center gap-1 hover:text-stone-700">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span> Duplicate
+                        </button>
+</div>
+<button class="text-stone-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 4 (Draft State) -->
+<div class="bg-stone-50/50 border border-dashed border-stone-200 rounded-xl flex flex-col items-center justify-center p-12 text-center group cursor-pointer hover:bg-stone-100 transition-colors">
+<div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+<h4 class="text-stone-700 font-semibold mb-1">Create New Template</h4>
+<p class="text-stone-400 text-xs max-w-[200px]">Define questions, types, and weighted scores for new exams.</p>
+</div>
+</div>
+<!-- Secondary Section: Recent Activity / Bento Style -->
+<div class="max-w-6xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-surface-container-low rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-bold uppercase tracking-wider text-stone-400">Quick Stats</h3>
+<span class="material-symbols-outlined text-stone-400" data-icon="insights">insights</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="p-4 bg-surface-container-lowest rounded-lg shadow-sm">
+<p class="text-[10px] uppercase font-bold text-stone-400 mb-1">Total Templates</p>
+<p class="text-2xl font-bold text-primary">24</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg shadow-sm">
+<p class="text-[10px] uppercase font-bold text-stone-400 mb-1">MC Questions</p>
+<p class="text-2xl font-bold text-primary">482</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg shadow-sm">
+<p class="text-[10px] uppercase font-bold text-stone-400 mb-1">Graded Sheets</p>
+<p class="text-2xl font-bold text-primary">1.2k</p>
+</div>
+</div>
+</div>
+<div class="bg-indigo-900 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-800 rounded-full blur-3xl opacity-50"></div>
+<div>
+<h3 class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-4">Pro Insight</h3>
+<p class="text-white text-lg font-semibold leading-snug">Mixed-type keys increase grading accuracy by 14% on average.</p>
+</div>
+<button class="mt-6 text-white text-xs font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+                    View Reports <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Margin for aesthetic spacing -->
+<footer class="h-24"></footer>
+</body></html>

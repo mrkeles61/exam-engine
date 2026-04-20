@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Evaluations - Exam Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#5654a8",
+                    "secondary-fixed": "#d5e3fc",
+                    "surface-variant": "#e4e2e2",
+                    "background": "#fbf9f8",
+                    "outline": "#777682",
+                    "primary-fixed": "#e2dfff",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "on-tertiary-fixed-variant": "#70380b",
+                    "tertiary": "#3e1a00",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#fbf9f8",
+                    "on-primary-container": "#9c9af4",
+                    "surface-dim": "#dbd9d9",
+                    "surface-container-highest": "#e4e2e2",
+                    "on-surface-variant": "#474651",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbc7",
+                    "tertiary-container": "#5f2b00",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1c1c",
+                    "on-primary-fixed": "#100563",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c8c5d3",
+                    "on-secondary-container": "#57657a",
+                    "inverse-primary": "#c3c0ff",
+                    "tertiary-fixed-dim": "#ffb688",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "on-background": "#1b1c1c",
+                    "primary": "#1a146b",
+                    "on-tertiary-container": "#de915e",
+                    "inverse-surface": "#303030",
+                    "on-tertiary-fixed": "#311300",
+                    "surface": "#fbf9f8",
+                    "inverse-on-surface": "#f2f0f0",
+                    "surface-container-high": "#eae8e7",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#efeded",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "on-primary-fixed-variant": "#3e3c8f",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#515f74",
+                    "primary-container": "#312e81",
+                    "surface-container-low": "#f5f3f3",
+                    "secondary-container": "#d5e3fc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(251, 249, 248, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .pipeline-line {
+            height: 2px;
+            flex-grow: 1;
+            background-color: #c8c5d3;
+        }
+        .pipeline-line.complete {
+            background-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] bg-[#efeded] dark:bg-slate-900 flex flex-col py-6 px-4 z-50">
+<div class="mb-10 px-2">
+<h1 class="text-xl font-bold text-[#1a146b] dark:text-indigo-300 tracking-tighter">Exam Engine</h1>
+<p class="text-xs text-on-surface-variant opacity-70">Digital Proctor</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#1b1c1c] dark:text-slate-400 opacity-70 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors rounded-lg group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-inter body-md tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#1b1c1c] dark:text-slate-400 opacity-70 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors rounded-lg group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+<span class="font-inter body-md tracking-tight">Upload Exam</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#1a146b] dark:text-indigo-300 font-semibold border-r-4 border-[#1a146b] hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-inter body-md tracking-tight">Evaluations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#1b1c1c] dark:text-slate-400 opacity-70 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors rounded-lg group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+<span class="font-inter body-md tracking-tight">Answer Keys</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#1b1c1c] dark:text-slate-400 opacity-70 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors rounded-lg group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-inter body-md tracking-tight">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/20">
+<a class="flex items-center gap-3 px-3 py-2 text-[#1b1c1c] dark:text-slate-400 opacity-70 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 transition-colors rounded-lg group scale-95 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-inter body-md tracking-tight">Settings</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-xs font-bold">JD</div>
+<div class="overflow-hidden">
+<p class="text-xs font-semibold truncate">Dr. John Doe</p>
+<p class="text-[10px] opacity-60 truncate">Administrator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Anchor -->
+<header class="fixed top-0 right-0 left-[240px] h-16 bg-[#ffffff] dark:bg-slate-950 flex items-center justify-between px-8 w-full z-40">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative max-w-md w-full focus-within:ring-2 focus-within:ring-indigo-500 rounded-lg bg-surface-container-low px-4 py-2 flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-body" placeholder="Search evaluations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-[#1b1c1c] dark:text-slate-500 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#1b1c1c] dark:text-slate-500 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<h2 class="font-inter headline-sm font-semibold text-[#1a146b] dark:text-indigo-400">Evaluations</h2>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-16 min-h-screen bg-surface">
+<div class="max-w-7xl mx-auto p-8">
+<!-- Page Header Section -->
+<div class="flex items-end justify-between mb-10">
+<div>
+<h1 class="text-4xl font-bold tracking-tight text-on-surface mb-2">Evaluations</h1>
+<p class="text-on-surface-variant font-body">All exam evaluation jobs in your department</p>
+</div>
+<button class="bg-primary hover:bg-primary-container text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    Upload New Exam
+                </button>
+</div>
+<!-- Filter Bar Section -->
+<div class="flex flex-col gap-4 mb-8">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 p-1 bg-surface-container rounded-xl">
+<button class="px-5 py-2 rounded-lg text-sm font-semibold bg-white text-primary shadow-sm">All</button>
+<button class="px-5 py-2 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-white/50 transition-colors">Running</button>
+<button class="px-5 py-2 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-white/50 transition-colors">Completed</button>
+<button class="px-5 py-2 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-white/50 transition-colors">Failed</button>
+</div>
+<p class="text-sm font-medium text-on-surface-variant/80">5 evaluations found</p>
+</div>
+</div>
+<!-- Evaluation List -->
+<div class="space-y-3">
+<!-- RUNNING JOB (Expanded) -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_-4px_rgba(27,28,28,0.04)] border border-outline-variant/10 hover:translate-y-[-2px] transition-all duration-300">
+<div class="flex items-center justify-between mb-8">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-lg font-bold text-on-surface">Calculus II Final</h3>
+<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Running</span>
+</div>
+<p class="text-sm text-on-surface-variant font-medium">MATH201 • Fall Semester 2023</p>
+<div class="flex items-center gap-4 mt-3 text-xs text-on-surface-variant/70">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="schedule">schedule</span>
+                                    Started 12 mins ago
+                                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="groups">groups</span>
+                                    67 students
+                                </span>
+</div>
+</div>
+<!-- Pipeline Center -->
+<div class="flex items-center gap-4 w-1/3 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">OCR</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-amber-500 ring-4 ring-amber-100 animate-pulse flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="sync">sync</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface">Layout</span>
+</div>
+<div class="pipeline-line"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="w-6 h-6 rounded-full bg-outline-variant flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Eval</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[140px]">
+<div class="text-right">
+<p class="text-xs font-semibold text-on-surface">Processing...</p>
+<p class="text-[10px] text-on-surface-variant">EST 4 mins left</p>
+</div>
+</div>
+</div>
+<!-- Progress Details -->
+<div class="bg-surface-container-low rounded-lg p-5">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-semibold text-on-surface">Processing student 34 of 67</span>
+<span class="text-sm font-bold text-primary">51%</span>
+</div>
+<div class="w-full bg-outline-variant/20 rounded-full h-2 mb-6 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 51%"></div>
+</div>
+<!-- Logs Section -->
+<div class="rounded-lg overflow-hidden border border-on-surface/5">
+<div class="bg-on-surface text-surface px-4 py-2 flex items-center justify-between text-xs font-medium">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs" data-icon="terminal">terminal</span>
+                                    System Logs
+                                </span>
+<span class="material-symbols-outlined text-xs cursor-pointer" data-icon="expand_less">expand_less</span>
+</div>
+<div class="bg-[#1b1c1c] p-4 font-mono text-[11px] text-emerald-400 space-y-1">
+<p class="opacity-60">[14:22:01] <span class="text-white">INFO:</span> Initializing batch evaluation engine...</p>
+<p class="opacity-60">[14:22:05] <span class="text-white">INFO:</span> OCR engine processing student id_8829...</p>
+<p class="opacity-60">[14:24:12] <span class="text-white">INFO:</span> Layout analysis started for 67 subjects...</p>
+<p class="opacity-100">[14:26:45] <span class="text-white">INFO:</span> OCR processing page 12 of student id_8834...</p>
+<p class="animate-pulse">_</p>
+</div>
+</div>
+</div>
+</div>
+<!-- COMPLETED JOB -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_2px_8px_-2px_rgba(27,28,28,0.04)] border border-outline-variant/10 hover:translate-y-[-2px] transition-all duration-300">
+<div class="flex items-center justify-between">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-lg font-bold text-on-surface">Modern Physics Midterm</h3>
+<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-sm text-on-surface-variant font-medium">PHYS302 • Spring Semester 2024</p>
+<div class="flex items-center gap-4 mt-3 text-xs text-on-surface-variant/70">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="schedule">schedule</span>
+                                    Completed 2h ago
+                                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="timer">timer</span>
+                                    Duration: 14m 22s
+                                </span>
+</div>
+</div>
+<!-- Pipeline Center -->
+<div class="flex items-center gap-4 w-1/3 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">OCR</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Layout</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Eval</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[140px]">
+<div class="flex items-center gap-1 text-tertiary-container">
+<span class="material-symbols-outlined text-xs" data-icon="star">star</span>
+<span class="text-[10px] font-bold uppercase">98% Accuracy</span>
+</div>
+<a class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" href="#">
+                                View Results
+                                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- FAILED JOB -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_2px_8px_-2px_rgba(27,28,28,0.04)] border border-outline-variant/10 hover:translate-y-[-2px] transition-all duration-300">
+<div class="flex items-center justify-between">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-lg font-bold text-on-surface">Data Structures Lab</h3>
+<span class="bg-error-container text-error text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Failed</span>
+</div>
+<p class="text-sm text-on-surface-variant font-medium">CS202 • Spring Semester 2024</p>
+<div class="flex items-center gap-4 mt-3 text-xs text-on-surface-variant/70">
+<span class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-xs" data-icon="error_outline">error_outline</span>
+                                    Memory Limit Exceeded
+                                </span>
+</div>
+</div>
+<!-- Pipeline Center -->
+<div class="flex items-center gap-4 w-1/3 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">OCR</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-error flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</div>
+<span class="text-[10px] font-semibold text-error">Layout</span>
+</div>
+<div class="pipeline-line"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="w-6 h-6 rounded-full bg-outline-variant flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Eval</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[140px]">
+<button class="bg-surface-container-high hover:bg-surface-variant text-on-surface px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                                Retry Job
+                            </button>
+</div>
+</div>
+</div>
+<!-- COMPLETED JOB (Alternate) -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_2px_8px_-2px_rgba(27,28,28,0.04)] border border-outline-variant/10 hover:translate-y-[-2px] transition-all duration-300">
+<div class="flex items-center justify-between">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-lg font-bold text-on-surface">Intro to Microeconomics</h3>
+<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-sm text-on-surface-variant font-medium">ECON101 • Fall Semester 2023</p>
+<div class="flex items-center gap-4 mt-3 text-xs text-on-surface-variant/70">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="schedule">schedule</span>
+                                    Completed Yesterday
+                                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="groups">groups</span>
+                                    112 students
+                                </span>
+</div>
+</div>
+<!-- Pipeline Center -->
+<div class="flex items-center gap-4 w-1/3 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">OCR</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Layout</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Eval</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[140px]">
+<a class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" href="#">
+                                View Results
+                                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- COMPLETED JOB (Alternate 2) -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_2px_8px_-2px_rgba(27,28,28,0.04)] border border-outline-variant/10 hover:translate-y-[-2px] transition-all duration-300">
+<div class="flex items-center justify-between">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-lg font-bold text-on-surface">Organic Chemistry I</h3>
+<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-sm text-on-surface-variant font-medium">CHEM201 • Fall Semester 2023</p>
+<div class="flex items-center gap-4 mt-3 text-xs text-on-surface-variant/70">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="schedule">schedule</span>
+                                    3 days ago
+                                </span>
+</div>
+</div>
+<!-- Pipeline Center -->
+<div class="flex items-center gap-4 w-1/3 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">OCR</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Layout</span>
+</div>
+<div class="pipeline-line complete"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] font-semibold text-on-surface-variant">Eval</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[140px]">
+<a class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" href="#">
+                                View Results
+                                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Stats / AI Insights Floating Card -->
+<div class="fixed bottom-8 right-8 z-30 max-w-xs glass-panel p-6 rounded-2xl shadow-2xl border border-white/40">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-xs font-bold uppercase tracking-widest text-primary opacity-60">System Health</h4>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-on-surface-variant">Avg. Eval Time</span>
+<span class="text-sm font-bold text-on-surface">8.4m</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-on-surface-variant">AI Confidence</span>
+<div class="flex items-center gap-1.5">
+<span class="bg-tertiary-container text-tertiary-fixed-dim text-[10px] font-bold px-2 py-0.5 rounded-full">94.2%</span>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/30 w-full"></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Proctor Optimized</p>
+<p class="text-[10px] text-on-surface-variant">32 batches today</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>

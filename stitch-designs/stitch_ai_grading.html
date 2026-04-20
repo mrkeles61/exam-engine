@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Grading Review | Exam Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#b9c7df",
+                        "primary-container": "#312e81",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-background": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#5654a8",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#70380b",
+                        "surface-bright": "#fbf9f8",
+                        "outline": "#777682",
+                        "on-tertiary-fixed": "#311300",
+                        "on-secondary-container": "#57657a",
+                        "inverse-surface": "#303030",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "secondary": "#515f74",
+                        "primary-fixed": "#e2dfff",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "secondary-container": "#d5e3fc",
+                        "on-primary-fixed-variant": "#3e3c8f",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-surface-variant": "#474651",
+                        "inverse-on-surface": "#f2f0f0",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-tertiary-container": "#de915e",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#eae8e7",
+                        "surface-container": "#efeded",
+                        "background": "#fbf9f8",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#9c9af4",
+                        "tertiary-container": "#5f2b00",
+                        "surface-container-low": "#f5f3f3",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbc7",
+                        "tertiary": "#3e1a00",
+                        "surface-variant": "#e4e2e2",
+                        "surface-dim": "#dbd9d9",
+                        "on-surface": "#1b1c1c",
+                        "on-primary-fixed": "#100563",
+                        "primary": "#1a146b",
+                        "outline-variant": "#c8c5d3",
+                        "on-error": "#ffffff",
+                        "surface": "#fbf9f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased overflow-hidden">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="flex flex-col h-screen py-8 bg-indigo-950 dark:bg-slate-950 h-full w-64 fixed left-0 top-0 z-50">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-bold tracking-tighter text-white">The Proctor</h1>
+<p class="text-xs text-indigo-400 font-medium opacity-80 uppercase tracking-widest mt-1">Academic Architect</p>
+</div>
+<nav class="flex-1 space-y-1 px-4">
+<!-- Grading is the active tab based on page intent -->
+<a class="flex items-center px-4 py-3 text-indigo-200/60 font-medium hover:bg-indigo-900/50 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="body-md tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 text-indigo-200/60 font-medium hover:bg-indigo-900/50 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3">description</span>
+<span class="body-md tracking-tight">Exams</span>
+</a>
+<a class="flex items-center px-4 py-3 text-white font-semibold border-r-4 border-indigo-400 bg-indigo-900/40 group" href="#">
+<span class="material-symbols-outlined mr-3" data-weight="fill" style="font-variation-settings: 'FILL' 1;">grading</span>
+<span class="body-md tracking-tight">Grading</span>
+</a>
+<a class="flex items-center px-4 py-3 text-indigo-200/60 font-medium hover:bg-indigo-900/50 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3">account_balance</span>
+<span class="body-md tracking-tight">Institutions</span>
+</a>
+<a class="flex items-center px-4 py-3 text-indigo-200/60 font-medium hover:bg-indigo-900/50 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="body-md tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pb-4">
+<button class="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-indigo-900/20">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-sm font-semibold">New Evaluation</span>
+</button>
+<div class="mt-6 pt-6 border-t border-indigo-900/50 flex items-center px-2">
+<img alt="User Profile" class="w-10 h-10 rounded-lg object-cover grayscale brightness-125" data-alt="professional headshot of an academic administrator in a suit, minimal office lighting, soft grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqulJgTL91n-PdAH7FVp84KEkvu_3KY6uD-IoaPXNHZD8V5efOhGbqwzxunwq7eJtv2Ez4JR8fbT5oBOWtsMK7hj_Jf-sxJ_5tp5q7uUVA7ccymp5QNpABmf1bZ8kem0pjAejZjXz-inCIbPhrMt8qX082anOHOC2lVi9XjNSlTBmXpTZCp3eE5LiTmson0lUJVLWi045Vqk1Y1IEBtUido9O6Eeg001h0yzfS25KVf-BXMFHE8CgO0jHYKPm2wFs0Pu7UjZbpGgU"/>
+<div class="ml-3">
+<p class="text-xs font-bold text-white leading-none">Prof. S. Vance</p>
+<p class="text-[10px] text-indigo-400 font-medium mt-1 uppercase tracking-tighter">Senior Auditor</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 h-screen flex flex-col relative">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="flex justify-between items-center px-10 h-16 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md docked full-width top-0 sticky z-40 bg-surface-container-low dark:bg-slate-800">
+<div class="flex items-center gap-8">
+<span class="text-indigo-900 dark:text-indigo-100 font-inter headline-sm text-sm tracking-tight font-semibold">Exam Intelligence Platform</span>
+<nav class="flex gap-6">
+<a class="text-indigo-900 dark:text-indigo-100 border-b-2 border-indigo-900 dark:border-indigo-400 pb-1 text-sm font-medium" href="#">Review Queue</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all text-sm font-medium" href="#">History</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all text-sm font-medium" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-container rounded-lg px-3 py-1.5 w-64 group focus-within:ring-2 ring-indigo-400/20">
+<span class="material-symbols-outlined text-outline text-lg">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm placeholder:text-outline w-full ml-2" placeholder="Search evaluations..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-500 hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Split Screen Layout -->
+<section class="flex flex-1 overflow-hidden">
+<!-- LEFT PANEL: Scanned Document (45%) -->
+<div class="w-[45%] bg-surface-container-low border-r border-outline-variant/15 flex flex-col">
+<!-- Toolbar -->
+<div class="px-6 h-12 flex items-center justify-between bg-white border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<button class="p-1.5 hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined text-xl">zoom_in</span></button>
+<button class="p-1.5 hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined text-xl">zoom_out</span></button>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<button class="flex items-center gap-2 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-surface-container rounded">
+<span class="material-symbols-outlined text-sm">fit_screen</span>
+                            Fit to Width
+                        </button>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-1 hover:bg-surface-container rounded"><span class="material-symbols-outlined">chevron_left</span></button>
+<span class="text-xs font-semibold tabular-nums">Page 1 <span class="text-outline font-normal">of</span> 4</span>
+<button class="p-1 hover:bg-surface-container rounded"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<!-- Document Content -->
+<div class="flex-1 overflow-auto p-8 flex justify-center bg-slate-100/50">
+<div class="relative w-full max-w-2xl aspect-[1/1.414] bg-white shadow-xl rounded-sm p-12 overflow-hidden">
+<!-- Image placeholder for handwritten exam -->
+<div class="absolute inset-0 opacity-10">
+<img alt="Scanned Document" class="w-full h-full object-cover" data-alt="high-resolution scan of a handwritten academic exam paper on lined paper with graphite pencil markings and diagrams" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANpNLPHw5vYO3Uj0nd6CN0K_gOpruKuv354akWUPdKPpr1FXw0THzWkirnP85IGXGlQQGEg7Vmwp--uS2tK8NY1Db_Lhhy0l5eYak41jyf06T7A1gF4UGHuFbMLUeD4t5RblYQskCVde-54Q4SiucrmOcAKL1X0NZsgXEhggD_N3kYRdFLr_FwPiWI2tZRnJNEgGI1RY-0n71W22LeDMIe8vH9wsem69lafcW51qpurWqtwAhuQwzkPCZQXZL1CNwTE3jadj8D74Y"/>
+</div>
+<!-- Semi-transparent Bounding Box (Question 07) -->
+<div class="absolute top-[45%] left-[10%] right-[10%] h-[30%] border-2 border-indigo-500 bg-indigo-500/5 rounded-sm ring-4 ring-indigo-500/10">
+<div class="absolute -top-3 left-4 bg-indigo-500 text-white text-[10px] px-2 py-0.5 font-bold rounded">QUESTION 07</div>
+</div>
+<!-- Mock OCR text -->
+<div class="relative space-y-6">
+<div class="h-6 w-1/3 bg-slate-100 rounded"></div>
+<div class="h-4 w-full bg-slate-50 rounded"></div>
+<div class="h-4 w-5/6 bg-slate-50 rounded"></div>
+<div class="h-4 w-11/12 bg-slate-50 rounded"></div>
+<div class="h-40"></div> <!-- Gap for bounding box -->
+<div class="h-4 w-4/5 bg-slate-50 rounded"></div>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<div class="px-6 py-3 bg-white border-t border-outline-variant/10 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></div>
+<span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">OCR Confidence: 94%</span>
+</div>
+<span class="text-[10px] text-outline font-medium">Rendered: Oct 24, 2023 | 2:14 PM</span>
+</div>
+</div>
+<!-- RIGHT PANEL: Review Console (55%) -->
+<div class="flex-1 flex flex-col bg-surface overflow-hidden">
+<!-- TOP: Student Summary Bar -->
+<div class="p-6 bg-white border-b border-outline-variant/10">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-900 font-bold text-lg">AY</div>
+<div>
+<h2 class="text-lg font-bold text-indigo-900 leading-tight">Ahmet Yilmaz</h2>
+<p class="font-mono text-xs text-outline tracking-tighter mt-0.5">ID: 2021030145</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold rounded-full text-xs border border-indigo-100">68.5% — BB</span>
+<div class="flex items-center gap-4 mt-3">
+<button class="text-xs font-semibold text-slate-500 hover:text-indigo-900 flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">west</span>
+                                    Previous Student
+                                </button>
+<button class="text-xs font-semibold text-slate-500 hover:text-indigo-900 flex items-center gap-1 transition-colors">
+                                    Next Student
+                                    <span class="material-symbols-outlined text-sm">east</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-50">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Progress: Reviewing 12 of 67</span>
+<span class="text-[10px] font-bold text-indigo-900">18%</span>
+</div>
+<div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-indigo-900 w-[18%]"></div>
+</div>
+</div>
+</div>
+<!-- BOTTOM: Detailed Grading List -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide pb-32">
+<!-- Q3: Multiple Choice -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-sm font-bold text-indigo-900">Q3 (MC, 4pts)</h3>
+<p class="text-[11px] text-outline mt-0.5">Basic Logic Gates Evaluation</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-100">Incorrect</span>
+<span class="text-sm font-bold text-red-600">0/4</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-3 rounded-lg">
+<span class="text-[10px] font-medium text-outline uppercase block mb-1">Student Answer</span>
+<span class="text-lg font-bold text-red-600">B</span>
+</div>
+<div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+<span class="text-[10px] font-medium text-emerald-600 uppercase block mb-1">Correct Answer</span>
+<span class="text-lg font-bold text-emerald-700">C</span>
+</div>
+</div>
+<div class="mt-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-500 text-sm">verified</span>
+<span class="text-[10px] font-medium text-slate-500 italic">OCR Extraction Verified</span>
+</div>
+</div>
+<!-- Q7: Open-Ended (Expanded AI Panel) -->
+<div class="bg-indigo-50/40 rounded-xl border-l-4 border-indigo-400 p-6 space-y-5">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-indigo-900 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-indigo-900">Q7 (Open-Ended, 15pts)</h3>
+<p class="text-[11px] text-indigo-600 font-medium">Advanced Recursion Analysis</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-3 mb-1.5">
+<span class="text-xs font-bold text-indigo-900">11/15</span>
+<div class="w-24 h-1.5 bg-indigo-200 rounded-full overflow-hidden">
+<div class="h-full bg-indigo-600 w-[73%]"></div>
+</div>
+</div>
+<span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter">AI Suggestion</span>
+</div>
+</div>
+<!-- Rubric Section -->
+<div class="space-y-3 bg-white/50 p-4 rounded-lg">
+<h4 class="text-[10px] font-bold text-indigo-900/60 uppercase tracking-widest">Scoring Rubric</h4>
+<div class="space-y-2">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+<span class="text-xs text-slate-700 font-medium">Identifies base case</span>
+</div>
+<span class="text-xs font-bold text-emerald-600">3/3</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-sm">info</span>
+<span class="text-xs text-slate-700 font-medium">Explains recursive step</span>
+</div>
+<span class="text-xs font-bold text-amber-600">4/5</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-red-400 text-sm">cancel</span>
+<span class="text-xs text-slate-700 font-medium">Time complexity analysis</span>
+</div>
+<span class="text-xs font-bold text-red-600">0/4</span>
+</div>
+</div>
+</div>
+<!-- AI Reasoning -->
+<div class="space-y-2">
+<h4 class="text-[10px] font-bold text-indigo-900/60 uppercase tracking-widest">AI Reasoning</h4>
+<blockquote class="text-xs leading-relaxed text-indigo-900/80 bg-indigo-100/30 p-3 rounded-lg border-l-2 border-indigo-200">
+                                "The student demonstrates a strong conceptual understanding of recursion through the accurate identification of the base case. However, the explanation of the recursive step is somewhat ambiguous, and they completely omits the required Big-O complexity analysis, leading to a point deduction in the third rubric criteria."
+                            </blockquote>
+</div>
+<!-- Metadata Badges -->
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-tertiary-container/10 text-tertiary-container text-[10px] font-bold rounded flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                                Semantic Similarity: 78%
+                            </span>
+<span class="px-2 py-1 bg-indigo-100 text-indigo-600 text-[10px] font-bold rounded flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[10px]">neurology</span>
+                                Model: Mistral-7B-Q4
+                            </span>
+</div>
+<!-- Actions -->
+<div class="pt-4 border-t border-indigo-200/30 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<label class="text-[10px] font-bold text-indigo-900 uppercase">Final Score</label>
+<input class="w-14 h-9 bg-white border border-indigo-200 rounded-lg text-center font-bold text-indigo-900 focus:ring-2 ring-indigo-500" type="text" value="11"/>
+<span class="text-xs font-bold text-indigo-400">/ 15</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all active:scale-95">Override</button>
+<button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">done_all</span>
+                                    Accept AI Grade
+                                </button>
+</div>
+</div>
+</div>
+<!-- Next Question Preview (Ghost Card) -->
+<div class="bg-surface-container p-5 rounded-xl border border-dashed border-outline-variant opacity-60">
+<h3 class="text-sm font-bold text-slate-400">Q8 (Short Answer, 5pts)</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- BottomNavBar (Authority: JSON & Context) -->
+<footer class="flex justify-end items-center px-12 gap-6 fixed bottom-0 right-0 w-[calc(100%-16rem)] h-20 bg-white dark:bg-slate-900 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] border-t border-slate-100 dark:border-slate-800 z-50">
+<div class="mr-auto flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-[10px] font-bold text-emerald-600 tracking-widest uppercase">Auto-save enabled</span>
+</div>
+<button class="text-slate-600 dark:text-slate-400 px-4 py-2 font-inter label-md tracking-widest uppercase hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                Save Progress
+            </button>
+<button class="text-slate-600 dark:text-slate-400 px-4 py-2 font-inter label-md tracking-widest uppercase hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">flag</span>
+                Flag Question
+            </button>
+<button class="text-slate-600 dark:text-slate-400 px-4 py-2 font-inter label-md tracking-widest uppercase hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">arrow_back</span>
+                Previous
+            </button>
+<button class="bg-indigo-900 text-white dark:bg-indigo-600 rounded-lg px-6 py-2 font-inter label-md tracking-widest uppercase hover:bg-indigo-800 transition-all scale-95 duration-200 flex items-center gap-2 shadow-lg shadow-indigo-900/20">
+<span class="material-symbols-outlined">check_circle</span>
+                Finalize Submission
+            </button>
+</footer>
+</main>
+</body></html>

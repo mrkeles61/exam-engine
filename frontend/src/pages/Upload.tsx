@@ -7,12 +7,7 @@ import { AnswerKeyModal } from '../components/AnswerKeyModal';
 import { LogTerminal } from '../components/LogTerminal';
 import { JobStatusBadge } from '../components/StatusBadge';
 import { useToast } from '../contexts/ToastContext';
-
-const EXAM_TYPE_OPTIONS: { value: ExamType; label: string }[] = [
-  { value: 'mc',    label: 'Sadece Çoktan Seçmeli' },
-  { value: 'open',  label: 'Sadece Açık Uçlu' },
-  { value: 'mixed', label: 'Karma (ÇS + Açık Uçlu)' },
-];
+import { useLang } from '../i18n';
 
 const TERMINAL_STATUSES: JobStatus[] = ['complete', 'ocr_failed', 'layout_failed', 'eval_failed', 'failed'];
 
@@ -20,7 +15,15 @@ function isTerminal(s: JobStatus) { return TERMINAL_STATUSES.includes(s); }
 
 export default function Upload() {
   const navigate   = useNavigate();
+  const { t } = useLang();
+  const tt = t as (key: string, vars?: Record<string, string | number>) => string;
   const { success: toastSuccess, error: toastError } = useToast();
+
+  const EXAM_TYPE_OPTIONS: { value: ExamType; label: string }[] = [
+    { value: 'mc',    label: tt('upload.examTypeMc') },
+    { value: 'open',  label: tt('upload.examTypeOpen') },
+    { value: 'mixed', label: tt('upload.examTypeMixed') },
+  ];
 
   // Form state
   const [file,         setFile]         = useState<File | null>(null);
@@ -71,19 +74,19 @@ export default function Upload() {
     setIsDragging(false);
     const dropped = e.dataTransfer.files[0];
     if (dropped?.type === 'application/pdf') { setFile(dropped); setError(''); }
-    else setError('Yalnızca PDF dosyaları kabul edilmektedir.');
+    else setError(tt('upload.onlyPdf'));
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const picked = e.target.files?.[0];
     if (picked?.type === 'application/pdf') { setFile(picked); setError(''); }
-    else if (picked) setError('Yalnızca PDF dosyaları kabul edilmektedir.');
+    else if (picked) setError(tt('upload.onlyPdf'));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file)              { setError('Lütfen bir PDF dosyası seçin.');   return; }
-    if (!title.trim())      { setError('Lütfen sınav başlığı girin.');     return; }
-    if (!courseName.trim()) { setError('Lütfen ders adı girin.');          return; }
+    if (!file)              { setError(tt('upload.needFile'));   return; }
+    if (!title.trim())      { setError(tt('upload.needTitle'));  return; }
+    if (!courseName.trim()) { setError(tt('upload.needCourse')); return; }
 
     setSubmitting(true);
     setError('');
@@ -105,15 +108,15 @@ export default function Upload() {
       if (manualMode) {
         // Stay on page, show manual controls
         setCreatedJob(evalRes.data);
-        toastSuccess('Sınav yüklendi — aşamaları manuel olarak çalıştırın.');
+        toastSuccess(tt('upload.toastManualStart'));
       } else {
-        toastSuccess('Değerlendirme başlatıldı!');
+        toastSuccess(tt('upload.toastEvalStarted'));
         navigate('/jobs');
       }
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
-        'Yükleme başarısız. Lütfen tekrar deneyin.';
+        tt('upload.uploadFailed');
       setError(msg);
       toastError(msg);
     } finally {
@@ -130,7 +133,7 @@ export default function Upload() {
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
-        'Aşama başlatılamadı.';
+        tt('upload.stageFailed');
       toastError(msg);
     } finally {
       setStageLoading(null);
@@ -155,8 +158,8 @@ export default function Upload() {
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-fade-up">
         <div className="page-header">
-          <h1 className="page-title">Manuel Mod</h1>
-          <p className="page-subtitle">Her pipeline aşamasını ayrı ayrı çalıştırın.</p>
+          <h1 className="page-title">{tt('upload.manualMode')}</h1>
+          <p className="page-subtitle">{tt('upload.manualModeSubtitle')}</p>
         </div>
 
         {/* Job info bar */}
@@ -170,34 +173,40 @@ export default function Upload() {
 
         {/* Stage control buttons */}
         <div className="card p-5 space-y-4">
-          <h2 className="text-sm font-semibold text-gray-700">Pipeline Aşamaları</h2>
+          <h2 className="text-sm font-semibold text-gray-700">{tt('upload.pipelineStages')}</h2>
 
           <div className="space-y-3">
             <StageButton
-              label="1. OCR — Metin Çıkarımı"
+              label={tt('upload.stageOcr')}
               icon="🔍"
               done={ocrDone}
               canRun={canOcr}
               running={s === 'ocr_running' || stageLoading === 'ocr'}
               failed={s === 'ocr_failed'}
+              runLabel={tt('upload.run')}
+              retryLabel={tt('upload.retry')}
               onRun={() => runStage('ocr')}
             />
             <StageButton
-              label="2. Düzen Analizi"
+              label={tt('upload.stageLayout')}
               icon="📐"
               done={layoutDone}
               canRun={canLayout}
               running={s === 'layout_running' || stageLoading === 'layout'}
               failed={s === 'layout_failed'}
+              runLabel={tt('upload.run')}
+              retryLabel={tt('upload.retry')}
               onRun={() => runStage('layout')}
             />
             <StageButton
-              label="3. Değerlendirme"
+              label={tt('upload.stageEvaluate')}
               icon="🎯"
               done={done}
               canRun={canEval}
               running={s === 'eval_running' || stageLoading === 'evaluate'}
               failed={s === 'eval_failed'}
+              runLabel={tt('upload.run')}
+              retryLabel={tt('upload.retry')}
               onRun={() => runStage('evaluate')}
             />
           </div>
@@ -205,28 +214,28 @@ export default function Upload() {
           {isRunning && (
             <p className="text-xs text-primary-600 flex items-center gap-1.5 animate-pulse">
               <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-              Aşama çalışıyor…
+              {tt('upload.stageRunning')}
             </p>
           )}
         </div>
 
         {/* Log terminal */}
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-gray-700">Pipeline Logları</h2>
+          <h2 className="text-sm font-semibold text-gray-700">{tt('upload.pipelineLogs')}</h2>
           <LogTerminal jobId={createdJob.id} live={live} />
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/jobs')} className="btn-primary">
-            {done ? 'Sonuçlara Git →' : 'İşler Sayfasına Git →'}
+            {done ? tt('upload.goToResults') : tt('upload.goToJobs')}
           </button>
           {done && (
             <button
               onClick={() => navigate(`/results/${createdJob.id}`)}
               className="btn-secondary"
             >
-              Sonuçları Gör
+              {tt('upload.viewResults')}
             </button>
           )}
         </div>
@@ -240,9 +249,9 @@ export default function Upload() {
       <div className="max-w-2xl mx-auto space-y-7 animate-fade-up">
         {/* Header */}
         <div className="page-header">
-          <h1 className="page-title">Sınav Yükle</h1>
+          <h1 className="page-title">{tt('upload.title')}</h1>
           <p className="page-subtitle">
-            Taranmış sınav PDF'ini yükleyin ve değerlendirme ayarlarını yapılandırın.
+            {tt('upload.subtitle')}
           </p>
         </div>
 
@@ -256,7 +265,7 @@ export default function Upload() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Drop zone */}
           <div>
-            <p className="label">Sınav PDF'i</p>
+            <p className="label">{tt('upload.pdfLabel')}</p>
             <div
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
@@ -283,7 +292,7 @@ export default function Upload() {
                   <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center
                                   justify-center mx-auto text-2xl">📄</div>
                   <p className="font-semibold text-gray-900">{file.name}</p>
-                  <p className="text-xs text-gray-500">{fileSizeMB} MB · PDF yüklenmeye hazır</p>
+                  <p className="text-xs text-gray-500">{fileSizeMB} {tt('upload.readyToUpload')}</p>
                   <button
                     type="button"
                     className="text-xs text-red-500 hover:text-red-700 hover:underline"
@@ -293,7 +302,7 @@ export default function Upload() {
                       if (fileInputRef.current) fileInputRef.current.value = '';
                     }}
                   >
-                    Dosyayı kaldır
+                    {tt('upload.removeFile')}
                   </button>
                 </div>
               ) : (
@@ -308,9 +317,9 @@ export default function Upload() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-700">
-                      PDF'i buraya sürükleyin veya seçmek için tıklayın
+                      {tt('upload.dropZone')}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">Yalnızca PDF · Maks. 50 MB</p>
+                    <p className="text-xs text-gray-400 mt-1">{tt('upload.fileHint')}</p>
                   </div>
                 </div>
               )}
@@ -321,20 +330,20 @@ export default function Upload() {
           <div className="card p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="label">Sınav Başlığı</label>
+                <label className="label">{tt('upload.examTitle')}</label>
                 <input
                   type="text" className="input"
-                  placeholder="ör. BM301 2024 Ara Sınavı"
+                  placeholder={tt('upload.examTitlePlaceholder')}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="label">Ders Adı</label>
+                <label className="label">{tt('upload.courseName')}</label>
                 <input
                   type="text" className="input"
-                  placeholder="ör. BM301 Algoritmalar"
+                  placeholder={tt('upload.courseNamePlaceholder')}
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
                   required
@@ -344,7 +353,7 @@ export default function Upload() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="label">Sınav Türü</label>
+                <label className="label">{tt('upload.examTypeLabel')}</label>
                 <select
                   className="input"
                   value={examType}
@@ -358,13 +367,13 @@ export default function Upload() {
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="label mb-0">Cevap Anahtarı (opsiyonel)</label>
+                  <label className="label mb-0">{tt('upload.answerKeyOptional')}</label>
                   <button
                     type="button"
                     onClick={() => setShowAKModal(true)}
                     className="text-xs text-primary-600 hover:text-primary-700 font-medium"
                   >
-                    + Yeni
+                    {tt('upload.newKey')}
                   </button>
                 </div>
                 <select
@@ -372,14 +381,14 @@ export default function Upload() {
                   value={answerKeyId}
                   onChange={(e) => setAnswerKeyId(e.target.value)}
                 >
-                  <option value="">— Cevap anahtarı seçin —</option>
+                  <option value="">{tt('upload.selectAnswerKey')}</option>
                   {answerKeys.map((ak) => (
                     <option key={ak.id} value={ak.id}>{ak.name}</option>
                   ))}
                 </select>
                 {answerKeys.length === 0 && (
                   <p className="text-xs text-gray-400 mt-1">
-                    Cevap anahtarı bulunamadı. Motor varsayılan puanlama kullanacak.
+                    {tt('upload.noKeys')}
                   </p>
                 )}
               </div>
@@ -388,9 +397,9 @@ export default function Upload() {
             {/* Manuel Mod toggle */}
             <div className="flex items-center justify-between pt-2 border-t border-gray-100">
               <div>
-                <p className="text-sm font-medium text-gray-700">Manuel Mod</p>
+                <p className="text-sm font-medium text-gray-700">{tt('upload.manualMode')}</p>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  Her pipeline aşamasını kendiniz başlatın
+                  {tt('upload.manualModeHint')}
                 </p>
               </div>
               <button
@@ -417,12 +426,12 @@ export default function Upload() {
               {submitting ? (
                 <>
                   <LoadingSpinner size="sm" text="" />
-                  Yükleniyor…
+                  {tt('upload.uploading')}
                 </>
               ) : manualMode ? (
-                <>📤 Yükle ve Manuel Başlat</>
+                <>{tt('upload.uploadAndManual')}</>
               ) : (
-                <><span>🚀</span> Değerlendirmeyi Başlat</>
+                <><span>🚀</span> {tt('upload.startEvaluation')}</>
               )}
             </button>
             <button
@@ -430,7 +439,7 @@ export default function Upload() {
               className="btn-secondary"
               onClick={() => navigate('/')}
             >
-              İptal
+              {t('common.cancel')}
             </button>
           </div>
         </form>
@@ -460,10 +469,12 @@ interface StageButtonProps {
   canRun: boolean;
   running: boolean;
   failed: boolean;
+  runLabel: string;
+  retryLabel: string;
   onRun: () => void;
 }
 
-function StageButton({ label, icon, done, canRun, running, failed, onRun }: StageButtonProps) {
+function StageButton({ label, icon, done, canRun, running, failed, runLabel, retryLabel, onRun }: StageButtonProps) {
   let stateCls = 'bg-gray-50 border-gray-200 text-gray-400';
   let statusNode: React.ReactNode = <span className="text-gray-300">●</span>;
 
@@ -497,7 +508,7 @@ function StageButton({ label, icon, done, canRun, running, failed, onRun }: Stag
             className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-primary-600 text-white
                        hover:bg-primary-700 transition-colors"
           >
-            {failed ? '↺ Tekrar' : 'Çalıştır'}
+            {failed ? retryLabel : runLabel}
           </button>
         )}
       </div>

@@ -2,6 +2,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import api from '../api/client';
 import { AnswerKey } from '../types';
 import { useToast } from '../contexts/ToastContext';
+import { useLang } from '../i18n';
 
 type Template = 'mc40' | 'mixed' | 'custom';
 
@@ -49,6 +50,7 @@ function buildOpenQuestions(count: number, pointsEach: number, startNum: number)
 
 export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
   const { success, error: toastError } = useToast();
+  const { t } = useLang();
 
   const [name,       setName]       = useState('');
   const [course,     setCourse]     = useState('');
@@ -106,15 +108,15 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
       if (editKey) {
         const res = await api.put<AnswerKey>(`/answer-keys/${editKey.id}`, payload);
         saved = res.data;
-        success('Cevap anahtarı güncellendi.');
+        success(t('keyModal.updated'));
       } else {
         const res = await api.post<AnswerKey>('/answer-keys', payload);
         saved = res.data;
-        success('Cevap anahtarı oluşturuldu.');
+        success(t('keyModal.created'));
       }
       onSaved(saved);
     } catch {
-      toastError('Kayıt sırasında bir hata oluştu.');
+      toastError(t('keyModal.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -132,7 +134,7 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <h2 className="text-lg font-bold text-gray-900 font-jakarta">
-            {editKey ? 'Cevap Anahtarını Düzenle' : 'Yeni Cevap Anahtarı'}
+            {editKey ? t('keyModal.editTitle') : t('keyModal.newTitle')}
           </h2>
           <button
             onClick={onClose}
@@ -146,11 +148,11 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
           {/* Name */}
           <div>
-            <label className="label">Cevap Anahtarı Adı</label>
+            <label className="label">{t('keyModal.nameLabel')}</label>
             <input
               type="text"
               className="input"
-              placeholder="ör. BM301 2024 Ara Sınav Cevap Anahtarı"
+              placeholder={t('keyModal.namePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -159,11 +161,11 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
 
           {/* Course */}
           <div>
-            <label className="label">Ders Adı</label>
+            <label className="label">{t('builder.courseName')}</label>
             <input
               type="text"
               className="input"
-              placeholder="ör. BM301 Algoritmalar"
+              placeholder={t('keyModal.coursePlaceholder')}
               value={course}
               onChange={(e) => setCourse(e.target.value)}
               required
@@ -172,25 +174,25 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
 
           {/* Template */}
           <div>
-            <label className="label">Soru Şablonu</label>
+            <label className="label">{t('keyModal.templateLabel')}</label>
             <div className="grid grid-cols-3 gap-2">
               {([
-                { value: 'mc40',  label: 'Sadece ÇS', sub: '40 soru · 100p' },
-                { value: 'mixed', label: 'Karma',     sub: '40 ÇS + 3 Açık' },
-                { value: 'custom',label: 'Özel',      sub: 'Kendi ayarın'   },
-              ] as { value: Template; label: string; sub: string }[]).map((t) => (
+                { value: 'mc40',  label: t('keyModal.tpl.mc40'),   sub: t('keyModal.tpl.mc40Sub') },
+                { value: 'mixed', label: t('keyModal.tpl.mixed'),  sub: t('keyModal.tpl.mixedSub') },
+                { value: 'custom',label: t('keyModal.tpl.custom'), sub: t('keyModal.tpl.customSub') },
+              ] as { value: Template; label: string; sub: string }[]).map((tpl) => (
                 <button
-                  key={t.value}
+                  key={tpl.value}
                   type="button"
-                  onClick={() => setTemplate(t.value)}
+                  onClick={() => setTemplate(tpl.value)}
                   className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 text-sm
                               font-medium transition-all duration-150
-                              ${template === t.value
+                              ${template === tpl.value
                                 ? 'border-primary-600 bg-primary-50 text-primary-700'
                                 : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
                 >
-                  <span className="font-semibold">{t.label}</span>
-                  <span className="text-xs mt-0.5 opacity-70">{t.sub}</span>
+                  <span className="font-semibold">{tpl.label}</span>
+                  <span className="text-xs mt-0.5 opacity-70">{tpl.sub}</span>
                 </button>
               ))}
             </div>
@@ -200,11 +202,11 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
           {template === 'custom' && (
             <div className="bg-gray-50 rounded-xl p-4 space-y-4">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Özel Yapılandırma
+                {t('keyModal.customConfig')}
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="label">ÇS Soru Sayısı</label>
+                  <label className="label">{t('keyModal.mcCount')}</label>
                   <input
                     type="number" min={0} max={200}
                     className="input"
@@ -213,7 +215,7 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
                   />
                 </div>
                 <div>
-                  <label className="label">ÇS Puan / Soru</label>
+                  <label className="label">{t('keyModal.mcPointsPer')}</label>
                   <input
                     type="number" min={0.1} max={100} step={0.5}
                     className="input"
@@ -222,7 +224,7 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
                   />
                 </div>
                 <div>
-                  <label className="label">Açık Soru Sayısı</label>
+                  <label className="label">{t('keyModal.openCount')}</label>
                   <input
                     type="number" min={0} max={20}
                     className="input"
@@ -231,7 +233,7 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
                   />
                 </div>
                 <div>
-                  <label className="label">Açık Puan / Soru</label>
+                  <label className="label">{t('keyModal.openPointsPer')}</label>
                   <input
                     type="number" min={1} max={100} step={1}
                     className="input"
@@ -245,7 +247,7 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
 
           {/* Summary */}
           <div className="flex items-center gap-2 px-4 py-3 bg-primary-50 rounded-xl text-sm text-primary-700">
-            <span className="font-semibold">Toplam puan:</span>
+            <span className="font-semibold">{t('keyModal.totalPoints')}</span>
             <span>{totalPoints}</span>
           </div>
 
@@ -255,14 +257,14 @@ export function AnswerKeyModal({ editKey, onClose, onSaved }: Props) {
               {saving ? (
                 <>
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Kaydediliyor…
+                  {t('builder.saving')}
                 </>
               ) : (
-                editKey ? 'Güncelle' : 'Oluştur'
+                editKey ? t('keyModal.update') : t('keyModal.create')
               )}
             </button>
             <button type="button" onClick={onClose} className="btn-secondary">
-              İptal
+              {t('common.cancel')}
             </button>
           </div>
         </form>

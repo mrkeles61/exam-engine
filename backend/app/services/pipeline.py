@@ -134,8 +134,45 @@ async def run_layout(job_id: str) -> None:
 
         await write_log(job_id, "layout", "info", "Düzen analizi başlatıldı — LayoutParser kullanılıyor")
 
+        # Pull the answer key so the mock layout can bias student answers toward correct.
+        # This makes demo results feel less uniformly random.
+        mc_key_for_layout: list[str] | None = None
+        fill_key_for_layout: list[list[str]] | None = None
+        num_mc = 40
+        num_open = 3
+        async with AsyncSessionLocal() as db:
+            res = await db.execute(select(EvaluationJob).where(EvaluationJob.id == job_id))
+            job = res.scalar_one_or_none()
+            if job:
+                resolved_ak_id = job.answer_key_id
+                if not resolved_ak_id:
+                    exam_res = await db.execute(select(Exam).where(Exam.id == job.exam_id))
+                    exam = exam_res.scalar_one_or_none()
+                    if exam:
+                        resolved_ak_id = exam.answer_key_id
+                if resolved_ak_id:
+                    ak_res = await db.execute(
+                        select(AnswerKey).where(AnswerKey.id == str(resolved_ak_id))
+                    )
+                    ak = ak_res.scalar_one_or_none()
+                    if ak and ak.questions:
+                        mc_qs = [q for q in ak.questions if q.get("type") == "mc"]
+                        fill_qs = [q for q in ak.questions if q.get("type") == "fill"]
+                        open_qs = [q for q in ak.questions if q.get("type") == "open"]
+                        mc_key_for_layout = [q.get("correct_answer", "A") for q in mc_qs] or None
+                        fill_key_for_layout = [q.get("fill_answers", []) for q in fill_qs] or None
+                        if mc_qs:
+                            num_mc = len(mc_qs)
+                        if open_qs:
+                            num_open = len(open_qs)
+
         student_sheets = await asyncio.get_event_loop().run_in_executor(
-            None, layout_service.get_student_sheets, exam_id
+            None,
+            lambda: layout_service.get_student_sheets(
+                exam_id, num_mc=num_mc, num_open=num_open,
+                mc_answer_key=mc_key_for_layout,
+                fill_answer_key=fill_key_for_layout,
+            ),
         )
         total = len(student_sheets)
 
@@ -221,6 +258,8 @@ async def run_evaluation(job_id: str) -> None:
                 if exam:
                     resolved_ak_id = exam.answer_key_id
 
+            mc_questions = None
+            fill_questions = None
             if resolved_ak_id:
                 ak_res = await db.execute(
                     select(AnswerKey).where(AnswerKey.id == str(resolved_ak_id))
@@ -229,7 +268,9 @@ async def run_evaluation(job_id: str) -> None:
                 if ak:
                     mc_qs = [q for q in ak.questions if q.get("type") == "mc"]
                     mc_key = [q.get("correct_answer", "A") for q in mc_qs] or None
+                    mc_questions = mc_qs or None
                     open_questions = [q for q in ak.questions if q.get("type") == "open"] or None
+                    fill_questions = [q for q in ak.questions if q.get("type") == "fill"] or None
 
             layout_out = job.layout_output or {}
             student_sheets = layout_out.get("student_sheets")
@@ -274,7 +315,10 @@ async def run_evaluation(job_id: str) -> None:
             await asyncio.sleep(random.uniform(1.0, 2.0))
 
             result_dict = await asyncio.get_event_loop().run_in_executor(
-                None, eval_service.evaluate_student, sheet, mc_key, open_questions
+                None,
+                lambda s=sheet: eval_service.evaluate_student(
+                    s, mc_key, open_questions, fill_questions, mc_questions,
+                ),
             )
             evaluated.append(result_dict)
 

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.core.database import create_tables
+from app.core.database import create_tables, run_dev_migrations
 from app.api import auth, upload, answer_keys, evaluation, results, logs, health
 
 logging.basicConfig(
@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     logger.info("Starting up — creating tables if not exist...")
     await create_tables()
+    logger.info("Running dev migrations (idempotent ALTER TABLE)...")
+    await run_dev_migrations()
     logger.info("Database ready.")
     yield
     logger.info("Shutting down.")

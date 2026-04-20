@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { PipelineLog } from '../types';
+import { useLang } from '../i18n';
 
 const LEVEL_CLS: Record<string, string> = {
   info:    'text-gray-300',
@@ -33,6 +34,7 @@ interface Props {
 }
 
 export function LogTerminal({ jobId, live }: Props) {
+  const { t } = useLang();
   const [logs, setLogs] = useState<PipelineLog[]>([]);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -56,9 +58,9 @@ export function LogTerminal({ jobId, live }: Props) {
       setLogs(prev => [...prev, ...data]);
       afterRef.current = data[data.length - 1].timestamp;
     } catch {
-      setError('Log bağlantısı kesildi');
+      setError(t('terminal.connectionLost'));
     }
-  }, [jobId]);
+  }, [jobId, t]);
 
   // Initial load + polling
   useEffect(() => {
@@ -99,7 +101,7 @@ export function LogTerminal({ jobId, live }: Props) {
         {live && (
           <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-400 font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            canlı
+            {t('terminal.live')}
           </span>
         )}
       </div>
@@ -107,7 +109,7 @@ export function LogTerminal({ jobId, live }: Props) {
       {/* Log output */}
       <div className="h-64 overflow-y-auto px-3 py-2 font-mono text-[11px] leading-5 space-y-0.5">
         {logs.length === 0 && !error && (
-          <p className="text-gray-600 italic">Loglar bekleniyor…</p>
+          <p className="text-gray-600 italic">{t('terminal.waiting')}</p>
         )}
         {error && (
           <p className="text-red-400">{error}</p>
@@ -132,8 +134,8 @@ export function LogTerminal({ jobId, live }: Props) {
 
       {/* Footer count */}
       <div className="px-3 py-1 bg-gray-900 border-t border-gray-800 flex justify-between text-[10px] text-gray-600 font-mono">
-        <span>{logs.length} satır</span>
-        {!live && logs.length > 0 && <span>tamamlandı</span>}
+        <span>{t('terminal.lines', { n: logs.length })}</span>
+        {!live && logs.length > 0 && <span>{t('terminal.completed')}</span>}
       </div>
     </div>
   );

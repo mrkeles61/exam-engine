@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Exam Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#312e81",
+                        "surface-container-high": "#eae8e7",
+                        "secondary-fixed": "#d5e3fc",
+                        "surface-variant": "#e4e2e2",
+                        "inverse-surface": "#303030",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fbf9f8",
+                        "secondary": "#515f74",
+                        "secondary-container": "#d5e3fc",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#de915e",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed-variant": "#3e3c8f",
+                        "primary": "#1a146b",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-container-low": "#f5f3f3",
+                        "surface-tint": "#5654a8",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1b1c1c",
+                        "outline": "#777682",
+                        "surface": "#fbf9f8",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-primary-container": "#9c9af4",
+                        "surface-container": "#efeded",
+                        "inverse-on-surface": "#f2f0f0",
+                        "tertiary": "#3e1a00",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-background": "#1b1c1c",
+                        "on-tertiary-fixed-variant": "#70380b",
+                        "background": "#fbf9f8",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#5f2b00",
+                        "primary-fixed": "#e2dfff",
+                        "outline-variant": "#c8c5d3",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#100563",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#57657a",
+                        "on-surface-variant": "#474651",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "on-tertiary-fixed": "#311300",
+                        "surface-dim": "#dbd9d9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- Top Navigation Bar (Shared Component Logic - Suppressed per transactional rule) -->
+<!-- Navigation suppressed for Login screen to focus on transaction -->
+<main class="flex-grow flex flex-col md:flex-row min-h-screen">
+<!-- Left Side: The Work (60%) -->
+<section class="w-full md:w-[60%] bg-surface-container-lowest flex flex-col px-8 md:px-20 py-10 relative">
+<!-- Brand Header -->
+<div class="flex items-center gap-3 mb-auto">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="text-on-primary font-bold tracking-tighter text-xl">EE</span>
+</div>
+<span class="text-xl font-extrabold tracking-tighter text-primary">Exam Engine</span>
+</div>
+<!-- Login Form Container -->
+<div class="max-w-md w-full mx-auto py-12">
+<div class="mb-10">
+<h1 class="text-[24px] font-semibold text-primary mb-2">Welcome back</h1>
+<p class="text-sm text-on-surface-variant">Sign in to your account</p>
+</div>
+<div class="space-y-6">
+<!-- Google Auth -->
+<button class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors duration-200">
+<img alt="Google Logo" class="w-5 h-5" data-alt="Official Google G-logo in multi-color on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtJJoWtdLI3R6gdHcYNM7XRD7jTZKZ4fhlQdJjpIJJHa1YppV1iVE-pPgTwF3eXejoUbtZ1-FAQuQklgDHmEAAUp4W9Ri5uCFJeR-ZigRB_A2xAKfzi4FgU0Ec2Ys3kDxnUMaO6s4InjO4CM6yPURl0MeDfVrFZvKbPdip6erWbSHFlF-D-oM-0bJqKYmdXZUy_APqNSfK_mI7C_n37taD-W9UPl5Z4keEputQWrU4_G_12ohGL4oy4PKj47J34_18wuP7e4d9PPc"/>
+<span class="text-sm font-medium text-on-surface">Continue with Google</span>
+</button>
+<!-- Divider -->
+<div class="relative flex items-center py-2">
+<div class="flex-grow border-t border-outline-variant/30"></div>
+<span class="flex-shrink mx-4 text-xs text-outline font-medium uppercase tracking-widest">or</span>
+<div class="flex-grow border-t border-outline-variant/30"></div>
+</div>
+<!-- Input Fields -->
+<form class="space-y-5">
+<div class="space-y-2">
+<label class="block text-[14px] font-medium text-on-surface-variant" for="email">Email</label>
+<input class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-transparent focus:bg-surface-container-lowest focus:ring-2 focus:ring-surface-tint/20 focus:border-surface-tint transition-all duration-200 outline-none text-sm" id="email" name="email" placeholder="name@university.edu" type="email"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block text-[14px] font-medium text-on-surface-variant" for="password">Password</label>
+<a class="text-[12px] font-semibold text-primary hover:opacity-80" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<input class="w-full px-4 py-3 rounded-lg bg-surface-container-low border-transparent focus:bg-surface-container-lowest focus:ring-2 focus:ring-surface-tint/20 focus:border-surface-tint transition-all duration-200 outline-none text-sm" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full py-3.5 bg-primary text-on-primary rounded-lg font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-150 shadow-lg shadow-primary/10" type="submit">
+                            Sign In
+                        </button>
+</form>
+<p class="text-center text-[14px] text-on-surface-variant pt-4">
+                        Don't have an account? 
+                        <a class="text-primary font-semibold hover:underline" href="#">Request access</a>
+</p>
+</div>
+</div>
+<div class="mt-auto"></div>
+</section>
+<!-- Right Side: The Context (40%) -->
+<section class="hidden md:flex w-[40%] bg-gradient-to-br from-[#1E1B4B] to-[#312E81] relative overflow-hidden items-center justify-center p-12">
+<!-- Abstract Background Shapes -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary-container/20 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+<div class="absolute bottom-0 left-0 w-80 h-80 bg-surface-tint/10 rounded-full blur-[80px] -ml-40 -mb-40"></div>
+<!-- Content -->
+<div class="relative z-10 w-full max-w-lg">
+<div class="aspect-square w-full relative mb-12">
+<!-- Hero Illustration Replacement -->
+<div class="w-full h-full rounded-2xl overflow-hidden shadow-2xl">
+<img alt="AI Exam Analysis" class="w-full h-full object-cover" data-alt="Abstract digital illustration of glowing exam papers floating in a vortex of blue data streams and AI nodes clean minimalist Stripe style deep indigo tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdDnulWYcx-HaB5pd7-ULbVP_m6EngU7g6tspnYc6QAyPGpPdCPMR-wr84l6lroU7g0U1i7CNfxGC-KivZK09snQgFb1EaYVwinss08IpLIqrRB8xoZJV-OmIwzc1w1SXhLSKgTUtl-JXmkNOMR3kq-IdA5jaNEzQCv21wMfmaY9DoeezlBb2VJcbOySYClcZOSBcH6OeFvDYaR90pjwi_0RHB8sahn3onL0pAN7AdbhLYiSINeHrDxO37feuyNXOcDnswMPA_qN4"/>
+</div>
+<!-- Floating Glass Insight Card -->
+<div class="absolute -bottom-6 -right-6 glass-panel p-6 rounded-xl max-w-[240px] shadow-2xl">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]" data-icon="auto_awesome" data-weight="fill">auto_awesome</span>
+</div>
+<span class="text-xs font-bold text-white uppercase tracking-wider">AI Insight</span>
+</div>
+<p class="text-indigo-100 text-sm leading-relaxed">
+                            Evaluating 1,240 scripts for Advanced Physics. Average grading precision: 99.8%.
+                        </p>
+</div>
+</div>
+<div class="text-center md:text-left">
+<h2 class="text-2xl font-bold text-white mb-4 tracking-tight">Precision at scale.</h2>
+<p class="text-indigo-200/80 text-sm leading-relaxed">
+                        Empowering global institutions with the next generation of academic integrity and automated evaluation metrics.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component Logic) -->
+<footer class="bg-stone-50 dark:bg-stone-950 w-full py-8 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 max-w-full gap-6">
+<p class="font-inter text-xs tracking-wide text-stone-500 dark:text-stone-400">© 2024 Exam Engine. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="font-inter text-xs tracking-wide text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Privacy Policy</a>
+<a class="font-inter text-xs tracking-wide text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Terms of Service</a>
+<a class="font-inter text-xs tracking-wide text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" href="#">Security</a>
+</div>
+</div>
+</footer>
+</body></html>

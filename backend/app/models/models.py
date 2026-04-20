@@ -131,7 +131,40 @@ class StudentResult(Base):
     answers = Column(JSONB, nullable=False, default=list)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
+    # Teacher review / approval workflow (multi-teacher audit trail)
+    approved_at = Column(DateTime(timezone=True), nullable=True)
+    approved_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    approved_by_email = Column(String(255), nullable=True)  # snapshot so display survives user deletion
+
     job = relationship("EvaluationJob", back_populates="results")
+    overrides = relationship(
+        "OverrideHistory",
+        primaryjoin="and_(StudentResult.job_id == foreign(OverrideHistory.job_id), "
+                    "StudentResult.student_id == foreign(OverrideHistory.student_id))",
+        viewonly=True,
+        order_by="OverrideHistory.overridden_at.desc()",
+    )
+
+
+class OverrideHistory(Base):
+    """
+    Append-only audit log of every per-question score override made by a teacher.
+    Composite link to StudentResult via (job_id, student_id). We snapshot the
+    user's email so the history stays readable even if the account is removed.
+    """
+    __tablename__ = "override_history"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    job_id = Column(UUID(as_uuid=True), ForeignKey("evaluation_jobs.id", ondelete="CASCADE"),
+                    nullable=False, index=True)
+    student_id = Column(String(20), nullable=False, index=True)
+    question_number = Column(Integer, nullable=False)
+    previous_score = Column(Float, nullable=False)
+    new_score = Column(Float, nullable=False)
+    reason = Column(Text, nullable=False)
+    overridden_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    overridden_by_email = Column(String(255), nullable=True)
+    overridden_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 class PipelineLog(Base):

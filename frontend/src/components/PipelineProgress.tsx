@@ -1,13 +1,14 @@
 import { JobStatus } from '../types';
+import { useLang, type TranslationKey } from '../i18n';
 
-interface Stage { label: string; labelTr: string }
+interface Stage { label: string; labelKey: TranslationKey }
 
 const STAGES: Stage[] = [
-  { label: 'Upload',     labelTr: 'Yükleme'        },
-  { label: 'OCR',        labelTr: 'OCR'             },
-  { label: 'Layout',     labelTr: 'Düzen'           },
-  { label: 'Evaluation', labelTr: 'Değerlendirme'   },
-  { label: 'Done',       labelTr: 'Tamamlandı'      },
+  { label: 'Upload',     labelKey: 'pipeline.stageUpload'     },
+  { label: 'OCR',        labelKey: 'pipeline.stageOcr'        },
+  { label: 'Layout',     labelKey: 'pipeline.stageLayout'     },
+  { label: 'Evaluation', labelKey: 'pipeline.stageEvaluation' },
+  { label: 'Done',       labelKey: 'pipeline.stageDone'       },
 ];
 
 function getActiveStage(status: JobStatus): number {
@@ -122,6 +123,7 @@ interface Props {
 }
 
 export function PipelineProgress({ status, progressPct, progressDetail }: Props) {
+  const { t } = useLang();
   const RUNNING: JobStatus[] = ['ocr_running', 'layout_running', 'eval_running'];
   const isActive = RUNNING.includes(status);
 
@@ -148,7 +150,7 @@ export function PipelineProgress({ status, progressPct, progressDetail }: Props)
                 </div>
                 <span className={`text-[9px] leading-tight hidden sm:block text-center
                                   ${labelStyles[state]}`}>
-                  {stage.labelTr}
+                  {t(stage.labelKey)}
                 </span>
               </div>
               {idx < STAGES.length - 1 && (
@@ -178,7 +180,7 @@ export function PipelineProgress({ status, progressPct, progressDetail }: Props)
       {/* Failed */}
       {FAILED_STATUSES.includes(status) && (
         <p className="text-xs text-red-600 font-medium flex items-center gap-1.5">
-          <span>⚠</span> Pipeline başarısız oldu
+          <span>⚠</span> {t('pipeline.failed')}
         </p>
       )}
     </div>

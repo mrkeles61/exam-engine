@@ -5,9 +5,11 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 import { EmptyState } from '../components/EmptyState';
 import { AnswerKeyModal } from '../components/AnswerKeyModal';
 import { useToast } from '../contexts/ToastContext';
+import { useLang } from '../i18n';
 
 export default function AnswerKeys() {
   const { success, error: toastError } = useToast();
+  const { t, lang } = useLang();
 
   const [keys,      setKeys]     = useState<AnswerKey[]>([]);
   const [loading,   setLoading]  = useState(true);
@@ -21,7 +23,7 @@ export default function AnswerKeys() {
       const res = await api.get<AnswerKey[]>('/answer-keys');
       setKeys(res.data);
     } catch {
-      toastError('Cevap anahtarları yüklenemedi.');
+      toastError(t('keys.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -30,14 +32,14 @@ export default function AnswerKeys() {
   useEffect(() => { fetchKeys(); }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Bu cevap anahtarını silmek istediğinizden emin misiniz?')) return;
+    if (!confirm(t('keys.confirmDelete'))) return;
     setDeleting(id);
     try {
       await api.delete(`/answer-keys/${id}`);
       setKeys((prev) => prev.filter((k) => k.id !== id));
-      success('Cevap anahtarı silindi.');
+      success(t('keys.deleted'));
     } catch {
-      toastError('Silme işlemi başarısız oldu.');
+      toastError(t('keys.deleteFailed'));
     } finally {
       setDeleting(null);
     }
@@ -66,7 +68,7 @@ export default function AnswerKeys() {
     handleCloseModal();
   };
 
-  if (loading) return <LoadingSpinner text="Cevap anahtarları yükleniyor…" fullPage />;
+  if (loading) return <LoadingSpinner text={t('keys.loading')} fullPage />;
 
   return (
     <>
@@ -74,25 +76,25 @@ export default function AnswerKeys() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="page-title">Cevap Anahtarları</h1>
-            <p className="page-subtitle">Sınav değerlendirme anahtarlarını yönetin</p>
+            <h1 className="page-title">{t('nav.answerKeys')}</h1>
+            <p className="page-subtitle">{t('keys.subtitle')}</p>
           </div>
           <button
             onClick={() => { setEditKey(null); setShowModal(true); }}
             className="btn-primary shrink-0"
           >
-            + Yeni Cevap Anahtarı
+            {t('keys.newKey')}
           </button>
         </div>
 
         {/* List */}
         {keys.length === 0 ? (
           <EmptyState
-            title="Henüz cevap anahtarı yok"
-            message="İlk cevap anahtarını oluşturmak için butona tıklayın."
+            title={t('keys.empty.title')}
+            message={t('keys.empty.message')}
             icon="🔑"
             action={{
-              label: 'Cevap Anahtarı Oluştur',
+              label: t('dashboard.createAnswerKey'),
               onClick: () => { setEditKey(null); setShowModal(true); },
             }}
           />
@@ -126,21 +128,21 @@ export default function AnswerKeys() {
                         {mcCount > 0 && (
                           <div className="flex items-center gap-1.5 text-xs text-gray-600">
                             <span className="w-2 h-2 bg-primary-400 rounded-full" />
-                            {mcCount} ÇS soru
+                            {t('keys.mcCount', { n: mcCount })}
                           </div>
                         )}
                         {openCount > 0 && (
                           <div className="flex items-center gap-1.5 text-xs text-gray-600">
                             <span className="w-2 h-2 bg-emerald-400 rounded-full" />
-                            {openCount} açık soru
+                            {t('keys.openCount', { n: openCount })}
                           </div>
                         )}
                         <div className="flex items-center gap-1.5 text-xs text-gray-600">
                           <span className="w-2 h-2 bg-amber-400 rounded-full" />
-                          {totalPts} toplam puan
+                          {t('keys.totalPoints', { n: totalPts })}
                         </div>
                         <span className="text-xs text-gray-400">
-                          {new Date(key.created_at).toLocaleDateString('tr-TR', {
+                          {new Date(key.created_at).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', {
                             day: '2-digit', month: 'short', year: 'numeric',
                           })}
                         </span>
@@ -153,7 +155,7 @@ export default function AnswerKeys() {
                         onClick={() => handleEdit(key)}
                         className="btn-secondary btn-sm"
                       >
-                        Düzenle
+                        {t('common.edit')}
                       </button>
                       <button
                         onClick={() => handleDelete(key.id)}
@@ -162,7 +164,7 @@ export default function AnswerKeys() {
                       >
                         {deleting === key.id ? (
                           <span className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />
-                        ) : 'Sil'}
+                        ) : t('common.delete')}
                       </button>
                     </div>
                   </div>

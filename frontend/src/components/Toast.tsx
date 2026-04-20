@@ -1,4 +1,5 @@
 import { useToast, Toast as ToastItem, ToastType } from '../contexts/ToastContext';
+import { useLang } from '../i18n';
 
 const config: Record<ToastType, { bg: string; icon: string; bar: string }> = {
   success: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', icon: '✓', bar: 'bg-emerald-500' },
@@ -9,6 +10,7 @@ const config: Record<ToastType, { bg: string; icon: string; bar: string }> = {
 
 function ToastItem_({ toast }: { toast: ToastItem }) {
   const { dismiss } = useToast();
+  const { t } = useLang();
   const { bg, icon, bar } = config[toast.type];
 
   return (
@@ -32,7 +34,7 @@ function ToastItem_({ toast }: { toast: ToastItem }) {
       <button
         onClick={() => dismiss(toast.id)}
         className="shrink-0 opacity-50 hover:opacity-100 transition-opacity text-lg leading-none"
-        aria-label="Kapat"
+        aria-label={t('common.close')}
       >
         ×
       </button>

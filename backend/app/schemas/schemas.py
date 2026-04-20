@@ -1,6 +1,6 @@
 from __future__ import annotations
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, field_validator, ConfigDict
@@ -91,10 +91,28 @@ class ExamHistoryItem(BaseModel):
 
 class QuestionSchema(BaseModel):
     number: int
-    type: str  # "mc" | "open"
+    # Extended in Fix #2: adds 'ms' (multi-select) and 'match' alongside mc/open/fill.
+    # Kept as a plain str (not Literal) to remain forgiving of legacy JSONB rows.
+    type: str  # "mc" | "ms" | "open" | "match" | "fill"
+    question_type: Optional[Literal["mc", "ms", "open", "match", "fill"]] = None
     correct_answer: Optional[str] = None
     rubric: Optional[str] = None
     points: float = 1.0
+    # For rendering realistic mock scans + richer answer-key content
+    text: Optional[str] = None                      # printed question text
+    options: Optional[Dict[str, str]] = None        # mc only — {"A": "Abstraction", ...}
+    fill_template: Optional[str] = None             # fill — sentence with "___" markers
+    fill_answers: Optional[List[str]] = None        # fill — expected answers by blank index
+    # Multi-select (ms)
+    ms_correct: Optional[List[str]] = None          # correct option letters, e.g. ["A", "C"]
+    # Matching (match)
+    match_left: Optional[List[str]] = None          # left-column items
+    match_right: Optional[List[str]] = None         # right-column items
+    match_pairs: Optional[List[List[int]]] = None   # list of [leftIdx, rightIdx] correct pairs
+    # Shared optional fields for new builder features
+    image_url: Optional[str] = None                 # data: URL or external URL (per-question image)
+    penalty_per_item: Optional[float] = 0.0         # deducted per wrong pick on mc/ms/match/fill
+    space_size: Optional[int] = 0                   # 0=None, 1=Tiny … 6=XXL reserved answer area
 
 
 class AnswerKeyCreate(BaseModel):
@@ -213,9 +231,27 @@ class PipelineLogOut(OrmBase):
 # Results
 # ---------------------------------------------------------------------------
 
+class BBox(BaseModel):
+    page: int
+    x: float   # normalized 0-1
+    y: float   # normalized 0-1
+    w: float   # normalized 0-1
+    h: float   # normalized 0-1
+
+
+class RubricItem(BaseModel):
+    label: str
+    score: float
+    max_score: float
+    status: str  # "pass" | "partial" | "fail"
+
+
 class AnswerDetail(BaseModel):
     question_number: int
+    # Extended in Fix #2: adds 'ms' and 'match' alongside mc/open/fill.
+    # Kept as a plain str so legacy seeded answers keep validating.
     question_type: str
+    label: Optional[str] = None
     student_answer: Optional[str]
     correct_answer: Optional[str]
     is_correct: Optional[bool]
@@ -223,6 +259,37 @@ class AnswerDetail(BaseModel):
     max_score: float
     feedback: Optional[str] = None
     confidence: Optional[float] = None
+    # Workspace-grade metadata (added for teacher review)
+    ocr_confidence: Optional[float] = None
+    # Per-stage confidence: how sure we are the bbox is placed on the right question.
+    # Separate from ocr_confidence (text readability) and `confidence` (grading).
+    segmentation_confidence: Optional[float] = None
+    bbox: Optional[BBox] = None
+    bubble_fills: Optional[Dict[str, float]] = None  # MC only
+    ai_reasoning: Optional[str] = None
+    model_used: Optional[str] = None
+    rubric_breakdown: Optional[List[RubricItem]] = None
+    override_applied: bool = False
+    needs_review: bool = False
+    # Rendering-ready content for the mock scan viewer
+    question_text: Optional[str] = None              # printed question
+    option_texts: Optional[Dict[str, str]] = None    # MC options
+    handwritten_answer: Optional[str] = None         # open — what student "wrote"
+    fill_template: Optional[str] = None              # fill — template with "___"
+    fill_blanks: Optional[Dict[str, str]] = None     # fill — {"1": "many", "2": "parent class"}
+    correct_blanks: Optional[Dict[str, str]] = None  # fill — answer key, for rendering comparisons
+    handwriting_seed: Optional[int] = None           # drives per-student font/color/rotation
+    # Multi-select (ms) rendering
+    ms_student_answers: Optional[List[str]] = None   # letters the student picked, e.g. ["A", "C"]
+    ms_correct: Optional[List[str]] = None           # echoed from the key for frontend rendering
+    # Matching (match) rendering
+    match_student_pairs: Optional[List[List[int]]] = None  # [leftIdx, rightIdx] pairs the student drew
+    match_left: Optional[List[str]] = None           # echoed from the key
+    match_right: Optional[List[str]] = None          # echoed from the key
+    match_pairs: Optional[List[List[int]]] = None    # echoed correct pairs for frontend rendering
+    # Shared optional visual fields
+    image_url: Optional[str] = None                  # per-question image (data: URL or external)
+    space_size: Optional[int] = 0                    # 0=None … 6=XXL reserved answer area
 
 
 class StudentResultOut(OrmBase):
@@ -238,6 +305,9 @@ class StudentResultOut(OrmBase):
     grade: str
     answers: List[Any]
     created_at: datetime
+    approved_at: Optional[datetime] = None
+    approved_by: Optional[UUID] = None
+    approved_by_email: Optional[str] = None
 
 
 class ResultsListOut(BaseModel):
@@ -268,6 +338,9 @@ class ReportOut(BaseModel):
     job_id: UUID
     exam_title: str
     course: str
+    # Gap B additions: which answer key was used + template match confidence.
+    answer_key_name: str = "Bilinmeyen"
+    template_match_confidence: float = 0.95
     total_students: int
     average: float
     median: float
@@ -294,10 +367,107 @@ class AnalyticsOut(BaseModel):
 
 
 class OverrideRequest(BaseModel):
+    """Legacy bulk override — still supported, now writes an audit row."""
     mc_score: Optional[float] = None
     open_score: Optional[float] = None
     grade: Optional[str] = None
     override_reason: str
+
+    @field_validator("override_reason")
+    @classmethod
+    def _reason_min_length(cls, v: str) -> str:
+        if not v or len(v.strip()) < 10:
+            raise ValueError("override_reason must be at least 10 characters")
+        return v.strip()
+
+
+class QuestionOverrideRequest(BaseModel):
+    """Per-question override — the primary API for the review workspace."""
+    question_number: int
+    new_score: float
+    reason: str
+
+    @field_validator("reason")
+    @classmethod
+    def _reason_min_length(cls, v: str) -> str:
+        if not v or len(v.strip()) < 10:
+            raise ValueError("reason must be at least 10 characters")
+        return v.strip()
+
+    @field_validator("new_score")
+    @classmethod
+    def _score_non_negative(cls, v: float) -> float:
+        if v < 0:
+            raise ValueError("new_score must be >= 0")
+        return v
+
+
+class AnswerRemapRequest(BaseModel):
+    """
+    Correct the student_answer captured by OCR/bubble detection.
+    MC only for now — teacher confirms the actual letter visible on the scan.
+    Re-scores the question against the answer key and writes an audit row.
+    """
+    question_number: int
+    new_student_answer: str
+    reason: str
+
+    @field_validator("new_student_answer")
+    @classmethod
+    def _letter_valid(cls, v: str) -> str:
+        s = (v or "").strip().upper()
+        if s not in {"A", "B", "C", "D", "E"}:
+            raise ValueError("new_student_answer must be one of A/B/C/D/E")
+        return s
+
+    @field_validator("reason")
+    @classmethod
+    def _reason_min_length(cls, v: str) -> str:
+        if not v or len(v.strip()) < 10:
+            raise ValueError("reason must be at least 10 characters")
+        return v.strip()
+
+
+class FlagSegmentationRequest(BaseModel):
+    """Flag a question's bbox as needing review (segmentation correction)."""
+    question_number: int
+    reason: str
+
+    @field_validator("reason")
+    @classmethod
+    def _reason_min_length(cls, v: str) -> str:
+        if not v or len(v.strip()) < 10:
+            raise ValueError("reason must be at least 10 characters")
+        return v.strip()
+
+
+class OverrideHistoryItem(OrmBase):
+    id: UUID
+    question_number: int
+    previous_score: float
+    new_score: float
+    reason: str
+    # Classifies the audit entry. Persisted as a `[kind]` prefix in `reason` since
+    # there's no dedicated column yet. Derived at read time in the router.
+    kind: Optional[Literal["override", "approve", "reopen", "flag_segmentation"]] = "override"
+    overridden_by: Optional[UUID] = None
+    overridden_by_email: Optional[str] = None
+    overridden_at: datetime
+
+
+class OverrideHistoryOut(BaseModel):
+    job_id: UUID
+    student_id: str
+    total: int
+    history: List[OverrideHistoryItem]
+
+
+class ApprovalOut(BaseModel):
+    job_id: UUID
+    student_id: str
+    approved_at: Optional[datetime]
+    approved_by: Optional[UUID]
+    approved_by_email: Optional[str]
 
 
 class NotifyOut(BaseModel):

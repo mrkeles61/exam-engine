@@ -46,3 +46,13 @@ logs/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Internal orchestration workspace (i18n agent coordination)
+.i18n-merge/
+
+# Stray 0-byte files from shell typos
+/Student
+/modal
+
+# Claude Code settings (per-user)
+.claude/settings.local.json
