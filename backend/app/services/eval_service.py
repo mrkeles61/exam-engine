@@ -100,9 +100,12 @@ _VERTICAL_GAP = 0.01     # between questions
 _WIDE_TYPES = {"match", "open"}
 
 _HEIGHT_BY_TYPE = {
-    "mc": 0.075,
-    "ms": 0.085,
-    "fill": 0.11,
+    # Heights sized to fit the question text + 4 options without clipping in
+    # the rendered bbox (frontend MCBlock/MsBlock uses overflow-hidden).
+    # Tuned on the narrowest viewport we support (V4 scan panel ≈ 350px wide).
+    "mc": 0.18,
+    "ms": 0.19,
+    "fill": 0.14,
     "match": 0.22,
     # open is dynamic — handled inline in _height_for
 }

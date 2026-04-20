@@ -57,11 +57,3 @@ htmlcov/
 # Claude Code settings (per-user)
 .claude/settings.local.json
 
-# Faruk-inspired optional modules (kept on disk for local dev, not tracked)
-# These modules reproduce visual conventions from
-# https://github.com/faruksevuk/iku-exam-generator and are excluded from
-# this public build. See App.tsx / TopNav.tsx for the safe fallback routes.
-frontend/src/pages/ExamBuilder.tsx
-frontend/src/pages/StudentDetailV4.tsx
-frontend/src/components/results/ExamShapedScan.tsx
-frontend/src/components/results/AnswerCutout.tsx

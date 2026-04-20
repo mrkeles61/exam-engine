@@ -12,6 +12,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/',              labelKey: 'nav.dashboard',    icon: 'dashboard',        end: true },
   { to: '/upload',        labelKey: 'nav.uploadExam',   icon: 'cloud_upload' },
+  { to: '/exam-builder',  labelKey: 'nav.examBuilder',  icon: 'assignment_add' },
   { to: '/jobs',          labelKey: 'nav.evaluations',  icon: 'assignment' },
   { to: '/answer-keys',   labelKey: 'nav.answerKeys',   icon: 'key' },
   { to: '/analytics',     labelKey: 'nav.analytics',    icon: 'analytics' },
@@ -44,7 +45,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       {/* Logo */}
       <div className="flex items-center justify-between mb-8 px-2">
         <div className="flex items-center gap-2">
-          <img src="/iku-logo.svg" alt="İKÜ" className="w-8 h-8 object-contain" />
+          <img src="/iku-logo.png" alt="İKÜ" className="w-8 h-8 object-contain" />
           <span className="text-lg font-bold tracking-tighter text-white">Exam Engine</span>
         </div>
       </div>

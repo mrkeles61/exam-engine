@@ -28,9 +28,9 @@ function useCountUp(target: number, duration = 1200): number {
 }
 
 const METRICS: { key: string; labelKey: TranslationKey; icon: string; accent: string; iconColor: string }[] = [
-  { key: 'evals',    labelKey: 'dashboard.totalEvaluations',   icon: 'fact_check',    accent: 'border-primary-600', iconColor: 'text-primary-600/40' },
+  { key: 'evals',    labelKey: 'dashboard.totalEvaluations',   icon: 'fact_check',    accent: 'border-iku-red',     iconColor: 'text-iku-red/40' },
   { key: 'students', labelKey: 'dashboard.studentsEvaluated',  icon: 'group',         accent: 'border-emerald-500', iconColor: 'text-emerald-500/40' },
-  { key: 'avg',      labelKey: 'dashboard.averageScore',       icon: 'trending_up',   accent: 'border-purple-500',  iconColor: 'text-purple-500/40' },
+  { key: 'avg',      labelKey: 'dashboard.averageScore',       icon: 'trending_up',   accent: 'border-iku-black',   iconColor: 'text-iku-black/40' },
   { key: 'active',   labelKey: 'dashboard.activeJobs',         icon: 'rocket_launch', accent: 'border-amber-500',   iconColor: 'text-amber-500/40' },
 ];
 
@@ -131,8 +131,8 @@ export default function Dashboard() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <button
           onClick={() => navigate('/upload')}
-          className="group flex items-center justify-between p-5 bg-gradient-to-br from-iku-red to-iku-red-dark
-                     text-white rounded-xl shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+          className="group flex items-center justify-between p-5 text-white rounded-xl shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #ED1C24 0%, #C41820 100%)' }}
         >
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined">cloud_upload</span>
@@ -144,14 +144,14 @@ export default function Dashboard() {
           onClick={() => navigate('/exam-builder')}
           className="flex items-center gap-4 p-5 bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-xl hover:bg-surface-container-low transition-colors"
         >
-          <span className="material-symbols-outlined text-primary-600">assignment_add</span>
+          <span className="material-symbols-outlined text-iku-red">assignment_add</span>
           <span className="font-semibold">{t('nav.examBuilder')}</span>
         </button>
         <button
           onClick={() => navigate('/jobs')}
           className="flex items-center gap-4 p-5 bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-xl hover:bg-surface-container-low transition-colors"
         >
-          <span className="material-symbols-outlined text-primary-600">visibility</span>
+          <span className="material-symbols-outlined text-iku-red">visibility</span>
           <span className="font-semibold">{t('dashboard.viewEvaluations')}</span>
         </button>
       </section>
@@ -162,7 +162,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-bold text-on-surface">{t('dashboard.recentEvaluations')}</h2>
           <button
             onClick={() => navigate('/jobs')}
-            className="text-primary-600 text-sm font-semibold flex items-center gap-1 hover:underline"
+            className="text-iku-red text-sm font-semibold flex items-center gap-1 hover:underline"
           >
             {t('dashboard.viewAll')} <span className="material-symbols-outlined text-xs">arrow_forward</span>
           </button>
@@ -210,11 +210,11 @@ export default function Dashboard() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         {job.status === 'complete' ? (
-                          <button onClick={() => navigate(`/results/${job.id}`)} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
+                          <button onClick={() => navigate(`/results/${job.id}`)} className="text-iku-red hover:text-iku-red-dark text-sm font-medium">
                             {t('dashboard.table.details')}
                           </button>
                         ) : ['ocr_running', 'layout_running', 'eval_running'].includes(job.status) ? (
-                          <button onClick={() => navigate(`/jobs`)} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
+                          <button onClick={() => navigate(`/jobs`)} className="text-iku-red hover:text-iku-red-dark text-sm font-medium">
                             {t('nav.evaluations')}
                           </button>
                         ) : null}

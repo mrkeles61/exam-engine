@@ -45,7 +45,7 @@ export default function Login() {
         <section className="w-full md:w-[60%] bg-surface-container-lowest flex flex-col px-8 md:px-20 py-10 relative">
           {/* Brand Header */}
           <div className="flex items-center gap-3 mb-auto">
-            <img src="/iku-logo.svg" alt="İKÜ" className="w-10 h-10" />
+            <img src="/iku-logo.png" alt="İKÜ" className="w-10 h-10" />
             <span className="text-xl font-extrabold tracking-tighter text-iku-black">Exam Engine</span>
           </div>
 
@@ -158,26 +158,41 @@ export default function Login() {
         </section>
 
         {/* Right Side: Hero (40%) */}
-        <section className="hidden md:flex w-[40%] bg-gradient-to-br from-iku-black to-iku-charcoal relative overflow-hidden items-center justify-center p-12">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-iku-red/20 rounded-full blur-[100px] -mr-48 -mt-48" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-iku-red/10 rounded-full blur-[80px] -ml-40 -mb-40" />
+        <section
+          className="hidden md:flex w-[40%] relative overflow-hidden items-center justify-center p-12"
+          style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%)' }}
+        >
+          <div
+            className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] -mr-48 -mt-48"
+            style={{ backgroundColor: 'rgba(237, 28, 36, 0.20)' }}
+          />
+          <div
+            className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-[80px] -ml-40 -mb-40"
+            style={{ backgroundColor: 'rgba(237, 28, 36, 0.10)' }}
+          />
 
           <div className="relative z-10 w-full max-w-lg text-center">
-            <img src="/iku-logo.svg" alt="İKÜ" className="w-24 h-24 mx-auto mb-8" />
-            <h2 className="text-2xl font-bold text-white mb-4 tracking-tight">{tt('login.heroTitle')}</h2>
-            <p className="text-white/70 text-sm leading-relaxed mb-8">
+            <img src="/iku-logo.png" alt="İKÜ" className="w-24 h-24 mx-auto mb-8" />
+            <h2 className="text-3xl font-bold text-white mb-4 tracking-tight">{tt('login.heroTitle')}</h2>
+            <p className="text-white/80 text-sm leading-relaxed mb-8">
               {tt('login.heroSubtitle')}
             </p>
 
-            {/* Glass insight card */}
-            <div className="glass-panel p-6 rounded-xl max-w-[280px] mx-auto shadow-2xl text-left">
+            {/* Insight card — explicit dark surface so it stays legible regardless of Tailwind gradient resolution */}
+            <div
+              className="p-6 rounded-xl max-w-[300px] mx-auto shadow-2xl text-left border border-white/10"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.06)' }}
+            >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-full bg-iku-red/30 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-iku-red text-lg">neurology</span>
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(237, 28, 36, 0.30)' }}
+                >
+                  <span className="material-symbols-outlined text-lg" style={{ color: '#ED1C24' }}>neurology</span>
                 </div>
                 <span className="text-xs font-bold text-white uppercase tracking-wider">{tt('login.aiInsight')}</span>
               </div>
-              <p className="text-white/85 text-sm leading-relaxed">
+              <p className="text-white text-sm leading-relaxed">
                 {tt('login.insightBody')}
               </p>
             </div>
